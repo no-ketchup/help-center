@@ -6,7 +6,7 @@ export default function Footer() {
     return (
         <>
             {/* Top Section */}
-            <footer className="daisy-footer p-10">
+            <footer className="daisy-footer p-10 hidden sm:grid sm:grid-cols-3 sm:gap-6 sm:p-6">
                 <nav>
                     <h6 className="daisy-footer-title" role="heading" aria-level={2}>プラットフォーム</h6>
                     <a

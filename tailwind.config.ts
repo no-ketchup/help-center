@@ -11,6 +11,12 @@ export default {
   ],
   theme: {
     extend: {
+      zIndex: {
+        header: "50",
+        drawer: "100",
+        footer: "10",
+        backToTop: "90",
+      },
       fontSize: {
         "footer-font": "0.9375rem",
       },

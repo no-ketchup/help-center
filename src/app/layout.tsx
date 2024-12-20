@@ -39,16 +39,18 @@ export default function RootLayout({
             enableSystem={true}
             disableTransitionOnChange
         >
-            <Header />
+            <Header/>
 
             {/* Main Content */}
-            <main className="flex-grow">
+            <main
+                className="flex-grow flex flex-col px-4 sm:px-6 lg:px-8 pt-16 pb-16 md:pb-20"
+            >
                 {children}
             </main>
 
-            <Footer />
+            <Footer/>
         </ThemeProvider>
-        <BackToTop />
+        <BackToTop/>
         </body>
         </html>
     );
