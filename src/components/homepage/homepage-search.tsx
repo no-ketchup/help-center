@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { exampleKeywords } from "@/const/search-keyword-examples";
@@ -13,29 +13,51 @@ export default function HomeSearch() {
     const [showCursor, setShowCursor] = useState<boolean>(false);
     const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
     const router = useRouter();
+    const animationTimeouts = useRef<number[]>([]);
+
+    const clearAnimationTimeouts = () => {
+        animationTimeouts.current.forEach(clearTimeout);
+        animationTimeouts.current = [];
+    };
 
     useEffect(() => {
-        if (isInputFocused) return; // Skip animation when input is focused
+        if (isInputFocused) {
+            clearAnimationTimeouts(); // Clear animation when input is focused
+            setDisplayText(""); // Reset display text
+            setShowCursor(false); // Hide cursor
+            return;
+        }
 
         const typeKeyword = async () => {
             const keyword = exampleKeywords[currentKeywordIndex];
-            setShowCursor(false); // Hide cursor during typing
+            setShowCursor(false);
 
+            // Typing effect
             for (let i = 0; i <= keyword.length; i++) {
-                setDisplayText(keyword.slice(0, i));
-                await new Promise((resolve) => setTimeout(resolve, 210)); // Typing speed
+                animationTimeouts.current.push(
+                    window.setTimeout(() => setDisplayText(keyword.slice(0, i)), i * 210)
+                );
             }
 
-            setShowCursor(true); // Show cursor after typing
-            await new Promise((resolve) => setTimeout(resolve, 2000)); // Blink
+            // Show cursor after typing
+            animationTimeouts.current.push(
+                window.setTimeout(() => setShowCursor(true), keyword.length * 210)
+            );
 
-            setShowCursor(false); // Hide cursor before switching
-            await new Promise((resolve) => setTimeout(resolve, 1200)); // Pause
-
-            setCurrentKeywordIndex((prev) => (prev + 1) % exampleKeywords.length);
+            // Pause before switching keyword
+            animationTimeouts.current.push(
+                window.setTimeout(() => {
+                    setShowCursor(false);
+                    setCurrentKeywordIndex((prev) => (prev + 1) % exampleKeywords.length);
+                }, keyword.length * 210 + 2000) // Typing + blink pause
+            );
         };
 
         typeKeyword();
+
+        return () => {
+            clearAnimationTimeouts(); // Cleanup on unmount or re-render
+        };
     }, [currentKeywordIndex, isInputFocused]);
 
     const handleSearchSubmit = (e: React.FormEvent) => {
@@ -47,6 +69,14 @@ export default function HomeSearch() {
         }
     };
 
+    const handleFocus = () => {
+        setIsInputFocused(true);
+    };
+
+    const handleBlur = () => {
+        setIsInputFocused(false);
+    };
+
     return (
         <div className="relative w-full max-w-3xl mx-auto">
             <form onSubmit={handleSearchSubmit} className="relative flex items-center">
@@ -54,8 +84,8 @@ export default function HomeSearch() {
                     <Combobox.Input
                         type="search"
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        onFocus={() => setIsInputFocused(true)}
-                        onBlur={() => setIsInputFocused(false)}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
                         placeholder={searchQuery ? "" : ""}
                         className="w-full pl-3 pr-16 py-4 rounded-md border-2 border-accent-content dark:border-dark-base-200 bg-gray-100 dark:bg-zinc-700 focus:outline-none focus:ring-1 focus:ring-primary focus:ring-offset-2 appearance-none font-light font-mono tracking-tighter text-lg"
                         aria-label="Search"
