@@ -1,21 +1,21 @@
 import { ThemeProvider } from "next-themes";
 import type { Metadata } from "next";
-import { Noto_Sans_JP, M_PLUS_1_Code } from "next/font/google";
+import { Zen_Kaku_Gothic_New, Zen_Old_Mincho } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header/header";
 import Footer from "@/components/footer/footer";
 import { BackToTop } from "@/components/common/back-to-top";
 
-const notoSansJP = Noto_Sans_JP({
+const zenKakuGothicNew = Zen_Kaku_Gothic_New({
     subsets: ["latin"],
-    weight: ["400", "700"],
-    variable: "--font-noto-sans-jp",
+    weight: ["300", "400", "500", "700", "900"],
+    variable: "--font-zen-kaku-gothic-new",
 });
 
-const mPlus1Code = M_PLUS_1_Code({
+const zenOldMincho = Zen_Old_Mincho({
     subsets: ["latin"],
-    weight: ["400", "700"],
-    variable: "--font-mplus1-code",
+    weight: ["400", "500", "600", "700", "900"],
+    variable: "--font-zen-old-mincho",
 });
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export default function RootLayout({
     return (
         <html lang="ja" className="dark" suppressHydrationWarning>
         <body
-            className={`${notoSansJP.variable} ${mPlus1Code.variable} antialiased`}
+            className={`${zenKakuGothicNew.variable} ${zenOldMincho.variable} antialiased`}
         >
         <ThemeProvider
             attribute="class"

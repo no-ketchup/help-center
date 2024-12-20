@@ -75,7 +75,7 @@ export default function HomeSearch() {
 
                     <button
                         type="submit"
-                        className="absolute right-4 top-1/2 -translate-y-1/2 p-3 hover:scale-110 transition-transform"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 p-3 hover:scale-110 transition-transform"
                         aria-label="Search"
                     >
                         <Search className="h-8 w-8"/>
