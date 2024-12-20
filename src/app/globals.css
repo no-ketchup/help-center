@@ -4,10 +4,7 @@
 
 /* Base styles for body */
 body {
-  font-family: 'Zen Kaku Gothic New', Arial, 'Zen Old Mincho', sans-serif;
-  font-size: 16px; /* Standard font size */
-  line-height: 1.75; /* Improved readability */
-  letter-spacing: 0.05em; /* Slightly more space for Japanese text */
+  font-family: 'Zen Kaku Gothic New', Arial, 'Zen Old Mincho', 'Zen Kaku Gothic Antique', sans-serif;
   word-wrap: break-word; /* Prevent text overflow */
   margin: 0;
   padding: 0;
@@ -24,14 +21,20 @@ body, header {
 }
 
 footer {
-  @apply bg-gray-100 text-black transition-colors duration-300 ease-in-out; /* Light mode footer */
+  @apply bg-gray-100 text-black transition-colors duration-300 ease-in-out;
 }
 
 /* Dark mode styles */
-.dark body, header {
+.dark body {
   @apply transition-colors duration-300 ease-in-out;
   background-color: #2b2b2b;
   color: #ffffff;
+}
+
+.dark header {
+  @apply transition-colors duration-300 ease-in-out;
+  background-color: #2b2b2b;
+  color: #e0e6f6;
 }
 
 .dark footer {
@@ -61,4 +64,115 @@ footer {
   .animate-blink {
     animation: blink 1s steps(1, start) infinite;
   }
+}
+
+/* Zen Kaku Gothic Antique */
+@font-face {
+  font-family: 'Zen Kaku Gothic Antique';
+  src: url('/fonts/zen-kaku-gothic-antique/zen-kaku-gothic-antique-300.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Zen Kaku Gothic Antique';
+  src: url('/fonts/zen-kaku-gothic-antique/zen-kaku-gothic-antique-400.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Zen Kaku Gothic Antique';
+  src: url('/fonts/zen-kaku-gothic-antique/zen-kaku-gothic-antique-500.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Zen Kaku Gothic Antique';
+  src: url('/fonts/zen-kaku-gothic-antique/zen-kaku-gothic-antique-700.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Zen Kaku Gothic Antique';
+  src: url('/fonts/zen-kaku-gothic-antique/zen-kaku-gothic-antique-900.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Zen Kaku Gothic New */
+@font-face {
+  font-family: 'Zen Kaku Gothic New';
+  src: url('/fonts/zen-kaku-gothic-new/zen-kaku-gothic-new-300.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Zen Kaku Gothic New';
+  src: url('/fonts/zen-kaku-gothic-new/zen-kaku-gothic-new-400.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Zen Kaku Gothic New';
+  src: url('/fonts/zen-kaku-gothic-new/zen-kaku-gothic-new-500.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Zen Kaku Gothic New';
+  src: url('/fonts/zen-kaku-gothic-new/zen-kaku-gothic-new-700.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Zen Kaku Gothic New';
+  src: url('/fonts/zen-kaku-gothic-new/zen-kaku-gothic-new-900.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Zen Old Mincho */
+@font-face {
+  font-family: 'Zen Old Mincho';
+  src: url('/fonts/zen-old-mincho/zen-old-mincho-400.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Zen Old Mincho';
+  src: url('/fonts/zen-old-mincho/zen-old-mincho-500.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Zen Old Mincho';
+  src: url('/fonts/zen-old-mincho/zen-old-mincho-600.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Zen Old Mincho';
+  src: url('/fonts/zen-old-mincho/zen-old-mincho-700.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Zen Old Mincho';
+  src: url('/fonts/zen-old-mincho/zen-old-mincho-900.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
 }

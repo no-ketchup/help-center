@@ -1,22 +1,9 @@
 import { ThemeProvider } from "next-themes";
 import type { Metadata } from "next";
-import { Zen_Kaku_Gothic_New, Zen_Old_Mincho } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header/header";
 import Footer from "@/components/footer/footer";
 import { BackToTop } from "@/components/common/back-to-top";
-
-const zenKakuGothicNew = Zen_Kaku_Gothic_New({
-    subsets: ["latin"],
-    weight: ["300", "400", "500", "700", "900"],
-    variable: "--font-zen-kaku-gothic-new",
-});
-
-const zenOldMincho = Zen_Old_Mincho({
-    subsets: ["latin"],
-    weight: ["400", "500", "600", "700", "900"],
-    variable: "--font-zen-old-mincho",
-});
 
 export const metadata: Metadata = {
     title: "Yeeflowヘルプセンター",
@@ -30,9 +17,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="ja" className="dark" suppressHydrationWarning>
-        <body
-            className={`${zenKakuGothicNew.variable} ${zenOldMincho.variable} antialiased`}
-        >
+        <body className="antialiased">
         <ThemeProvider
             attribute="class"
             defaultTheme="system"

@@ -17,6 +17,10 @@ export default {
         footer: "10",
         backToTop: "90",
       },
+      fontFamily: {
+        gothic: ['Zen Kaku Gothic New', 'Zen Kaku Gothic Antique', 'sans-serif'],
+        mincho: ['Zen Old Mincho', 'serif'],
+      },
       fontSize: {
         "footer-font": "0.9375rem",
       },

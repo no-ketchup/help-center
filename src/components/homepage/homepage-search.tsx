@@ -57,7 +57,7 @@ export default function HomeSearch() {
                         onFocus={() => setIsInputFocused(true)}
                         onBlur={() => setIsInputFocused(false)}
                         placeholder={searchQuery ? "" : ""}
-                        className="w-full pl-3 pr-16 py-4 rounded-md border-2 border-accent-content dark:border-dark-accent focus:outline-none focus:ring-1 focus:ring-primary focus:ring-offset-2 appearance-none font-light font-mono tracking-tighter text-lg"
+                        className="w-full pl-3 pr-16 py-4 rounded-md border-2 border-accent-content dark:border-dark-base-200 bg-gray-100 dark:bg-zinc-700 focus:outline-none focus:ring-1 focus:ring-primary focus:ring-offset-2 appearance-none font-light font-mono tracking-tighter text-lg"
                         aria-label="Search"
                     />
 

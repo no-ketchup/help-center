@@ -11,7 +11,6 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
-    "@next/font": "^14.2.15",
     "@react-spring/web": "^9.7.5",
     "@sentry/nextjs": "^8.45.1",
     "@theme-toggles/react": "^4.1.0",
