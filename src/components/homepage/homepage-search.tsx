@@ -28,7 +28,7 @@ export default function HomeSearch() {
             return;
         }
 
-        const typeKeyword = async () => {
+        const typeAndDeleteKeyword = async () => {
             const keyword = exampleKeywords[currentKeywordIndex];
             setShowCursor(false);
 
@@ -39,21 +39,32 @@ export default function HomeSearch() {
                 );
             }
 
-            // Show cursor after typing
+            // Pause after typing
             animationTimeouts.current.push(
                 window.setTimeout(() => setShowCursor(true), keyword.length * 210)
             );
 
-            // Pause before switching keyword
+            // Deleting effect
+            animationTimeouts.current.push(
+                window.setTimeout(() => setShowCursor(false), keyword.length * 210 + 2000)
+            );
+
+            for (let i = keyword.length; i >= 0; i--) {
+                animationTimeouts.current.push(
+                    window.setTimeout(() => setDisplayText(keyword.slice(0, i)),
+                        keyword.length * 210 + 2000 + (keyword.length - i) * 150)
+                );
+            }
+
+            // Move to the next keyword
             animationTimeouts.current.push(
                 window.setTimeout(() => {
-                    setShowCursor(false);
                     setCurrentKeywordIndex((prev) => (prev + 1) % exampleKeywords.length);
-                }, keyword.length * 210 + 2000) // Typing + blink pause
+                }, keyword.length * 210 + 2000 + keyword.length * 150)
             );
         };
 
-        typeKeyword();
+        typeAndDeleteKeyword();
 
         return () => {
             clearAnimationTimeouts(); // Cleanup on unmount or re-render

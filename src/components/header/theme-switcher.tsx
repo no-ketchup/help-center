@@ -14,7 +14,7 @@ export default function ThemeToggle() {
     return (
         <label
             htmlFor="theme-toggle"
-            className="relative flex h-6 w-12 cursor-pointer items-center rounded-full bg-slate-100 dark:bg-slate-900 transition-colors flex-shrink-0 p-1.5"
+            className="relative flex h-6 w-12 cursor-pointer items-center rounded-full bg-slate-100 dark:bg-zinc-800 transition-colors flex-shrink-0 p-1.5"
         >
             {/* Hidden Checkbox */}
             <input

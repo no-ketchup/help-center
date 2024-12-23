@@ -6,7 +6,8 @@ export default function Footer() {
     return (
         <>
             {/* Top Section */}
-            <footer className="daisy-footer p-10 hidden sm:grid sm:grid-cols-3 sm:gap-6 sm:p-6">
+            <footer
+                className="daisy-footer font-zen-old-mincho font-medium text-sm tracking-tighter hidden sm:grid sm:grid-cols-3 sm:gap-6 sm:px-8 sm:py-6">
                 <nav>
                     <h6 className="daisy-footer-title" role="heading" aria-level={2}>プラットフォーム</h6>
                     <a
@@ -96,7 +97,8 @@ export default function Footer() {
             </footer>
 
             {/* Bottom Section */}
-            <footer className="daisy-footer border-t border-dotted border-base-300 px-10 py-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <footer
+                className="daisy-footer border-t border-dotted border-dark-base-300 dark:border-base-300 px-10 py-6 flex flex-col md:flex-row justify-between items-center gap-6">
                 <aside className="flex items-center gap-4">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -111,7 +113,7 @@ export default function Footer() {
                             />
                         </g>
                     </svg>
-                    <p className="text-footer-font">
+                    <p className="text-footer-font font-medium">
                         Yeeflow © {currentYear}
                         <br/>
                         働き方を変え、生産性を高めましょう
