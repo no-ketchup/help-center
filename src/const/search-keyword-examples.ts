@@ -1,10 +1,10 @@
 export const exampleKeywords = [
-    "アプリケーション管理",
-    "承認フォーム作成",
-    "ワークフロー設計",
-    "フォームレポート作成",
-    "データリスト管理",
-    "権限設定",
-    "フィールドデザイン",
-    "データリスト管理",
+    "here are some keywords",
+    "keywords for searchox",
+    "sounds like something nice to have",
+    "hit the search button without typing anything",
+    "it would be searching the sample keyword",
+    "are those enough for display",
+    "looks enough",
+    "maybe one last more",
 ];

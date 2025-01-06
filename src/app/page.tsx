@@ -1,44 +1,32 @@
-"use client";
+import HelpCenterSearch from "../components/launch/help-center-search";
+import QuickLinks from "../components/launch/quick-links-section";
 
-import { homepageFeatures, iconMap } from "@/const/homepage-features";
-import HomeSearch from "@/components/homepage/homepage-search";
-import Link from "next/link";
-
-export default function HomePage() {
+export default function LaunchPage() {
     return (
-        <div className="flex flex-col items-center justify-start min-h-screen px-4 py-8 sm:py-5">
-            {/* Title Section */}
-            <h1 className="mb-8 text-2xl font-bold text-center tracking-tight sm:mb-10 sm:text-3xl md:text-4xl">
-                どのようにお手伝いできますか？
-            </h1>
+        <div className="mx-auto w-full max-w-6xl pt-40 px-4 sm:px-6 lg:px-8 flex flex-col min-h-screen">
+            {/* Title and Search Section */}
+            <section className="flex flex-col gap-y-6">
+                <div className="text-left w-full">
+                    {/* Main Title */}
+                    <h1 className="text-3xl sm:text-4xl py-4 md:text-6xl font-medium tracking-tight">
+                        How can we be of assistance today?
+                    </h1>
+                    {/* Subtitle */}
+                    <p className="text-lg sm:text-xl text-gray-600">
+                        Search for solutions or articles…
+                    </p>
+                </div>
 
-            {/* Search Bar Section */}
-            <div className="mb-10 w-full max-w-lg sm:mb-14">
-                <HomeSearch />
-            </div>
+                {/* Search Bar */}
+                <div className="w-full max-w-2xl">
+                    <HelpCenterSearch />
+                </div>
+            </section>
 
-            {/* Features Section */}
-            <div className="grid w-full max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {homepageFeatures.map((feature) => {
-                    const IconComponent = iconMap[feature.icon];
-                    return (
-                        <Link
-                            key={feature.title}
-                            href={feature.link}
-                            className="flex flex-col items-center justify-center gap-3 p-6 transition-transform duration-300 ease-out hover:scale-110 sm:hover:scale-105"
-                        >
-                            {/* Render Icon */}
-                            <div className="flex items-center justify-center">
-                                <IconComponent className="h-12 w-12" />
-                            </div>
-                            {/* Title */}
-                            <span className="text-lg font-semibold text-center dark:text-gray-200">
-                                {feature.title}
-                            </span>
-                        </Link>
-                    );
-                })}
-            </div>
+            {/* Quick Links Section */}
+            <section className="pt-6">
+                <QuickLinks />
+            </section>
         </div>
     );
 }

@@ -1,51 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@100;200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@100;200;300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Base styles for body */
 body {
-  font-family: 'Zen Kaku Gothic New', Arial, 'Zen Old Mincho', 'Zen Kaku Gothic Antique', sans-serif;
-  word-wrap: break-word; /* Prevent text overflow */
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
+  font-family: 'IBM Plex Sans', 'IBM Plex Serif', 'IBM Plex Mono', Arial, sans-serif;
 }
 
 /* Light mode styles */
 body, header {
-  @apply transition-colors duration-300 ease-in-out;
-  background-color: #f8fbf8;
-  color: #161827;
+  @apply bg-gray-50 text-black;
 }
 
 footer {
-  @apply bg-gray-100 text-black transition-colors duration-300 ease-in-out;
+  @apply bg-gray-50 text-black;
 }
 
 /* Dark mode styles */
 .dark body {
-  @apply transition-colors duration-300 ease-in-out;
-  background-color: #2b2b2b;
-  color: #ffffff;
+  @apply bg-darkbg text-white;
 }
 
+/* Header */
 .dark header {
-  @apply transition-colors duration-300 ease-in-out;
-  background-color: #2b2b2b;
-  color: #e0e6f6;
+  @apply bg-darkbg text-gray-100;
 }
 
+/* Footer */
 .dark footer {
-  background-color: #242424;
-  color: #e0e6f6;
+  @apply bg-darkbg text-gray-400;
 }
 
-/* Transition for theme changes */
 @layer base {
   main {
-    @apply flex-grow flex flex-col;
+    @apply flex flex-col;
+  }
+  :root {
+    --radius: 0.5rem;
+    --sidebar-background: 210 20% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  .dark {
+    --sidebar-background: 0 0% 7.5%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -64,115 +76,4 @@ footer {
   .animate-blink {
     animation: blink 1s steps(1, start) infinite;
   }
-}
-
-/* Zen Kaku Gothic Antique */
-@font-face {
-  font-family: 'Zen Kaku Gothic Antique';
-  src: url('/fonts/zen-kaku-gothic-antique/zen-kaku-gothic-antique-300.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Zen Kaku Gothic Antique';
-  src: url('/fonts/zen-kaku-gothic-antique/zen-kaku-gothic-antique-400.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Zen Kaku Gothic Antique';
-  src: url('/fonts/zen-kaku-gothic-antique/zen-kaku-gothic-antique-500.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Zen Kaku Gothic Antique';
-  src: url('/fonts/zen-kaku-gothic-antique/zen-kaku-gothic-antique-700.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Zen Kaku Gothic Antique';
-  src: url('/fonts/zen-kaku-gothic-antique/zen-kaku-gothic-antique-900.ttf') format('truetype');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Zen Kaku Gothic New */
-@font-face {
-  font-family: 'Zen Kaku Gothic New';
-  src: url('/fonts/zen-kaku-gothic-new/zen-kaku-gothic-new-300.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Zen Kaku Gothic New';
-  src: url('/fonts/zen-kaku-gothic-new/zen-kaku-gothic-new-400.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Zen Kaku Gothic New';
-  src: url('/fonts/zen-kaku-gothic-new/zen-kaku-gothic-new-500.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Zen Kaku Gothic New';
-  src: url('/fonts/zen-kaku-gothic-new/zen-kaku-gothic-new-700.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Zen Kaku Gothic New';
-  src: url('/fonts/zen-kaku-gothic-new/zen-kaku-gothic-new-900.ttf') format('truetype');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Zen Old Mincho */
-@font-face {
-  font-family: 'Zen Old Mincho';
-  src: url('/fonts/zen-old-mincho/zen-old-mincho-400.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Zen Old Mincho';
-  src: url('/fonts/zen-old-mincho/zen-old-mincho-500.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Zen Old Mincho';
-  src: url('/fonts/zen-old-mincho/zen-old-mincho-600.ttf') format('truetype');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Zen Old Mincho';
-  src: url('/fonts/zen-old-mincho/zen-old-mincho-700.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Zen Old Mincho';
-  src: url('/fonts/zen-old-mincho/zen-old-mincho-900.ttf') format('truetype');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
 }

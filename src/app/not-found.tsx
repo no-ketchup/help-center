@@ -8,7 +8,7 @@ import "./globals.css";
 
 export default function NotFound() {
     return (
-        <div className={cn("min-h-screen flex flex-col items-center justify-center bg-base-100 text-base-content dark:bg-zinc-950 dark:text-gray-100")}>
+        <div className={cn("min-h-screen flex flex-col items-center justify-center ")}>
             <Head>
                 <title>ページが見つかりません</title>
                 <meta name="robots" content="noindex, nofollow" />

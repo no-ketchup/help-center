@@ -1,41 +1,45 @@
+import Header from "../components/header/header";
+import Footer from "../components/footer/footer";
 import { ThemeProvider } from "next-themes";
 import type { Metadata } from "next";
+import { UpdateLayoutVariables } from "@/components/utilities/update-layout-variables";
 import "./globals.css";
-import Header from "@/components/header/header";
-import Footer from "@/components/footer/footer";
-import { BackToTop } from "@/components/common/back-to-top";
 
 export const metadata: Metadata = {
-    title: "Yeeflowヘルプセンター",
-    description: "何かご不明な点はございませんか？",
+    title: "Help center",
+    description: "A sample dedicated application for documents and support",
 };
 
-export default function RootLayout({
-                                       children,
-                                   }: {
-    children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="ja" className="dark" suppressHydrationWarning>
-        <body className="antialiased">
+        <html lang="en" suppressHydrationWarning>
+        <body className="antialiased flex flex-col">
         <ThemeProvider
             attribute="class"
             defaultTheme="system"
-            enableSystem={true}
+            enableSystem
             disableTransitionOnChange
         >
-            <Header/>
+            <UpdateLayoutVariables />
 
-            {/* Main Content */}
-            <main
-                className="flex-grow flex flex-col px-4 sm:px-6 lg:px-8 pt-16 pb-16 md:pb-20"
-            >
-                {children}
-            </main>
+            {/* Global Header */}
+            <div className="w-full max-w-screen-xl mx-auto px-0">
+                <Header />
+            </div>
 
-            <Footer/>
+            {/* Main Container */}
+            <div className="flex flex-col w-screen min-h-screen px-0">
+                <main className="flex flex-1 flex-col relative">
+                    {children}
+                </main>
+            </div>
+
+            {/* Global Footer */}
+            <div className="w-full max-w-screen-xl mx-auto px-0">
+                <Footer />
+            </div>
+
         </ThemeProvider>
-        <BackToTop/>
         </body>
         </html>
     );
