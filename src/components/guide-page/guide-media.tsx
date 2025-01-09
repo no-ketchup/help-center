@@ -1,0 +1,27 @@
+import React from "react";
+import Image from "next/image";
+
+interface GuideMediaProps {
+    media: { url: string; title: string; alt?: string }[];
+}
+
+const GuideMedia: React.FC<GuideMediaProps> = ({ media }) => {
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {media.map((item, index) => (
+                <figure key={index} className="space-y-2">
+                    <Image
+                        src={item.url}
+                        alt={item.alt || "Media"}
+                        width={500}
+                        height={300}
+                        className="rounded"
+                    />
+                    <figcaption className="text-sm text-gray-500">{item.title}</figcaption>
+                </figure>
+            ))}
+        </div>
+    );
+};
+
+export default GuideMedia;

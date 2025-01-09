@@ -7,11 +7,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "generate:types": "ts-node scripts/generate-contentful-types.mjs"
+    "lint": "next lint"
   },
   "dependencies": {
-    "@contentful/rich-text-types": "^17.0.0",
     "@radix-ui/react-collapsible": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.4",
     "@radix-ui/react-label": "^2.1.1",
@@ -29,7 +27,6 @@
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
-    "contentful": "^11.4.0",
     "dotenv": "^16.4.7",
     "formik": "^2.4.6",
     "fuse.js": "^7.0.0",
@@ -56,7 +53,6 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/webpack": "^5.28.5",
-    "contentful-ts-generator": "^0.2.12",
     "eslint": "^9",
     "eslint-config-next": "15.1.0",
     "postcss": "^8",

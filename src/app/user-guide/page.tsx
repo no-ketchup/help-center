@@ -4,7 +4,7 @@ import React from "react";
 import { useCategories } from "@/hooks/useCategories";
 
 export default function UserGuidePage() {
-    const categories = useCategories();
+    const { categories, loading, error } = useCategories();
 
     return (
         <div className="p-6 space-y-6">

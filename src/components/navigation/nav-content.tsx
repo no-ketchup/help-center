@@ -104,7 +104,7 @@ export default function NavContent({
                                             <SidebarMenuSubButton asChild>
                                                 <a
                                                     href={subItem.url}
-                                                    className="block p-2 text-sm rounded-lg hover:bg-muted dark:hover:bg-muted/80"
+                                                    className="block p-2 text-sm rounded-lg hover:underline hover:decoration-1 hover:underline-offset-2 hover:decoration-muted hover:bg-muted dark:hover:bg-muted/80"
                                                 >
                                                     {subItem.title}
                                                 </a>
@@ -120,7 +120,7 @@ export default function NavContent({
                             <a
                                 href={item.url}
                                 className={cn(
-                                    "flex items-center p-2 rounded-md transition-all duration-200 hover:bg-muted dark:hover:bg-muted/80",
+                                    "flex items-center p-2 rounded-md transition-all duration-200 hover:underline hover:decoration-2 hover:underline-offset-4 hover:bg-muted dark:hover:bg-muted/80",
                                     isCollapsed ? "justify-center" : "" // Center the icon in collapsed state
                                 )}
                                 title={isCollapsed ? item.title : undefined} // Tooltip for collapsed state

@@ -14,6 +14,11 @@ import {ChevronRight} from "lucide-react";
 export function DynamicBreadcrumb() {
     const { items } = useBreadcrumb();
 
+    // Handle edge case: No breadcrumb items
+    if (!items || items.length === 0) {
+        return null; // Render nothing if no items
+    }
+
     return (
         <Breadcrumb>
             <BreadcrumbList>

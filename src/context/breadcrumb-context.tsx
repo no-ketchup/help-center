@@ -9,7 +9,7 @@ type BreadcrumbItem = {
 
 type BreadcrumbContextType = {
     items?: BreadcrumbItem[];
-    title: string;
+    title?: string;
 };
 
 const BreadcrumbContext = createContext<BreadcrumbContextType | undefined>(
@@ -23,7 +23,7 @@ export const BreadcrumbProvider = ({
                                    }: {
     children: React.ReactNode;
     items?: BreadcrumbItem[];
-    title: string;
+    title?: string;
 }) => {
     return (
         <BreadcrumbContext.Provider value={{ items, title }}>

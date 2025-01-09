@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { useCategories } from "@/hooks/useCategories";
 import {
@@ -11,8 +9,9 @@ import {
     NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import React from "react";
-import {Signature} from "lucide-react";
-import {usePathname} from "next/navigation";
+import { Signature } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Category } from "@/types/Category";
 
 type NavItem = {
     title: string;
@@ -36,8 +35,14 @@ const navMainData: NavItem[] = [
 ];
 
 export default function HeaderNav() {
-    const categories = useCategories();
+    const { categories, loading, error } = useCategories();
     const pathname = usePathname();
+
+    if (loading) return null; // Avoid rendering navigation while loading
+    if (error) {
+        console.error("Error loading categories:", error.message);
+        return null; // Optionally render an error fallback
+    }
 
     // Populate the "User Guides" menu with categories and descriptions
     const navMain = navMainData.map((item) => {

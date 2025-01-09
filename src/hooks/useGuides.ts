@@ -1,24 +1,22 @@
 import { useState, useEffect } from "react";
-import { Category } from "@/types/Category";
-import { fetchCategories } from "@/api/categories";
+import { UserGuide } from "@/types/UserGuide";
+import { fetchGuides } from "@/api/guides";
 
-export function useCategories(): {
-    categories: Category[];
+export function useGuides(): {
+    guides: UserGuide[];
     loading: boolean;
     error: Error | null;
 } {
-    const [categories, setCategories] = useState<Category[]>([]);
+    const [guides, setGuides] = useState<UserGuide[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
-        // Fetch categories on component mount
         const fetchData = async (): Promise<void> => {
             try {
-                const data: Category[] = await fetchCategories(); // Ensure fetchCategories returns Category[]
-                setCategories(data);
+                const data: UserGuide[] = await fetchGuides();
+                setGuides(data);
             } catch (err: unknown) {
-                // Type-safe error handling
                 if (err instanceof Error) {
                     setError(err);
                 } else {
@@ -32,5 +30,5 @@ export function useCategories(): {
         void fetchData(); // Explicitly mark the Promise as intentionally unhandled
     }, []);
 
-    return { categories, loading, error };
+    return { guides, loading, error };
 }

@@ -35,7 +35,7 @@ const navMainData: NavItem[] = [
 const CATEGORY_COLLAPSE_KEY = "userGuideCategories:collapsed";
 
 export function AppSidebar() {
-    const categories = useCategories();
+    const { categories, loading, error } = useCategories();
     const { isCollapsed } = useSidebar();
     const [isReady, setIsReady] = useState(false); // Tracks whether localStorage is ready
     const [categoryCollapseState, setCategoryCollapseState] = useState<Record<string, boolean>>({});
@@ -55,6 +55,14 @@ export function AppSidebar() {
         });
     };
 
+    // Handle loading or error states for categories
+    if (loading) {
+        return <div>Loading categories...</div>;
+    }
+
+    if (error) {
+        return <div>Error loading categories: {error.message}</div>;
+    }
 
     // Dynamically populate categories into the navigation
     const navMain = navMainData.map((item) => {
