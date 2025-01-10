@@ -1,4 +1,4 @@
-import { fetchGuideBySlug, fetchGuides } from "@/api/guides";
+import { fetchGuideBySlug, fetchGuides } from "@/app/api/guides";
 import GuideHeader from "@/components/guide-page/guide-header";
 import GuideBody from "@/components/guide-page/guide-body";
 import GuideMedia from "@/components/guide-page/guide-media";

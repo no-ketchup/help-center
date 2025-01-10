@@ -12,6 +12,8 @@ import { Menu, ChevronDown, ChevronUp } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useCategories } from "@/hooks/useCategories";
+import { handleError } from "@/utils/handleError";
+import { mapCategoriesToNavItems } from "@/components/navigation/nav-utils";
 
 export default function MobileNavDrawer() {
     const { categories, loading, error } = useCategories();
@@ -20,6 +22,9 @@ export default function MobileNavDrawer() {
     const handleLinkClick = () => {
         setIsOpen(false);
     };
+
+    const resolvedError = error ? handleError(error) : null;
+    const categoryNavItems = !loading && !resolvedError ? mapCategoriesToNavItems(categories) : [];
 
     return (
         <div className="lg:hidden">
@@ -60,29 +65,29 @@ export default function MobileNavDrawer() {
                                     </summary>
 
                                     {loading && <p className="p-2 text-sm text-gray-500">Loading categories...</p>}
-                                    {error && (
+                                    {resolvedError && (
                                         <p className="p-2 text-sm text-red-500">
-                                            Error loading categories: {error.message}
+                                            Error loading categories: {resolvedError.message}
                                         </p>
                                     )}
 
-                                    {!loading && !error && categories.length > 0 && (
+                                    {!loading && !resolvedError && categoryNavItems.length > 0 && (
                                         <ul className="mt-2 border-l border-dotted space-y-1">
-                                            {categories.map((category) => (
-                                                <li key={category.slug}>
+                                            {categoryNavItems.map((item) => (
+                                                <li key={item.url}>
                                                     <Link
-                                                        href={`/user-guide/category/${category.slug}`}
+                                                        href={item.url || "#"}
                                                         className="block text-sm p-1 pl-4 text-gray-800 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600"
                                                         onClick={handleLinkClick} // Close the drawer on click
                                                     >
-                                                        {category.name}
+                                                        {item.title}
                                                     </Link>
                                                 </li>
                                             ))}
                                         </ul>
                                     )}
 
-                                    {!loading && !error && categories.length === 0 && (
+                                    {!loading && !resolvedError && categoryNavItems.length === 0 && (
                                         <p className="p-2 text-sm text-gray-500">No categories available.</p>
                                     )}
                                 </details>

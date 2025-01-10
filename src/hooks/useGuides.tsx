@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import { Category } from "@/types/Category";
-import { fetchCategories } from "@/api/categories";
+import { UserGuide } from "@/types/UserGuide";
+import { fetchGuides } from "@/app/api/guides";
 import { handleError } from "@/utils/handleError";
 
-export function useCategories(): {
-    categories: Category[];
+export function useGuides(): {
+    guides: UserGuide[];
     loading: boolean;
     error: string | null;
 } {
-    const [categories, setCategories] = useState<Category[]>([]);
+    const [guides, setGuides] = useState<UserGuide[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -17,9 +17,9 @@ export function useCategories(): {
 
         const fetchData = async () => {
             try {
-                const data = await fetchCategories();
+                const data = await fetchGuides();
                 if (isMounted) {
-                    setCategories(data);
+                    setGuides(data);
                 }
             } catch (err) {
                 if (isMounted) {
@@ -39,5 +39,5 @@ export function useCategories(): {
         };
     }, []);
 
-    return { categories, loading, error };
+    return { guides, loading, error };
 }

@@ -6,6 +6,8 @@ import { useCategories } from "@/hooks/useCategories";
 import React, {SVGProps, useEffect, useState} from "react";
 import { Collection, Question, Comment } from "../svgs";
 import { SearchForm } from "@/components/navigation/search-form";
+import { mapCategoriesToNavItems } from "@/components/navigation/nav-utils";
+import { handleError } from "@/utils/handleError";
 
 type NavItem = {
     title: string;
@@ -61,18 +63,17 @@ export function AppSidebar() {
     }
 
     if (error) {
-        return <div>Error loading categories: {error.message}</div>;
+        const resolvedError = handleError(error);
+        return <div>Error loading categories: {resolvedError.message}</div>;
     }
+
 
     // Dynamically populate categories into the navigation
     const navMain = navMainData.map((item) => {
         if (item.title === "User Guides") {
             return {
                 ...item,
-                items: categories.map((category) => ({
-                    title: category.name,
-                    url: `/user-guide/category/${category.slug}`,
-                })),
+                items: mapCategoriesToNavItems(categories), // Use mapper
             };
         }
         return item;

@@ -1,29 +1,35 @@
-import apiClient from '@/lib/apiClient';
+import { Category } from "@/types/Category";
 
-export const fetchCategories = async () => {
-    try {
-        const response = await apiClient.get('/api/categories');
-        return response.data.docs;
-    } catch (error) {
-        console.error('Error fetching categories:', error);
-        throw error;
-    }
-};
-
-export const fetchCategoryBySlug = async (slug: string) => {
-    const res = await apiClient.get('/api/categories', {
-        params: {
-            where: {
-                slug: {
-                    equals: slug,
-                },
-            },
+export const fetchCategories = async (): Promise<Category[]> => {
+    const response = await fetch('/api/categories', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
         },
     });
 
-    if (res.data.docs.length === 0) {
-        return null; // No category found
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData?.error || `Failed to fetch categories: ${response.statusText}`);
     }
 
-    return res.data.docs[0]; // Return the first category
+    const data = await response.json();
+    return data.docs;
+};
+
+export const fetchCategoryBySlug = async (slug: string): Promise<Category | null> => {
+    const response = await fetch(`/api/categories?where[slug][equals]=${slug}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData?.error || `Failed to fetch category: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data.docs[0] || null;
 };

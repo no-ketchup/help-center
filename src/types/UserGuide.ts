@@ -1,4 +1,5 @@
 import { Category } from "@/types/Category";
+import { Media } from "@/types/Media";
 
 export interface UserGuide {
     id: string;
@@ -32,6 +33,7 @@ export interface UserGuide {
         };
     };
     categories: Category[]; // Array of categories
+    media: Media[];
     estimatedReadTime: number; // Estimated reading time in minutes
     createdDate: string; // ISO date string
     updatedDate: string; // ISO date string

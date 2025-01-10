@@ -1,5 +1,5 @@
-import { fetchGuidesByCategory } from "@/api/guides";
-import { fetchCategoryBySlug } from "@/api/categories";
+import { fetchGuidesByCategory } from "@/app/api/guides";
+import { fetchCategoryBySlug } from "@/app/api/categories";
 import { UserGuide } from "@/types/UserGuide";
 import { Category } from "@/types/Category";
 

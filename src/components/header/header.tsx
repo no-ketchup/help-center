@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Logo } from "../svgs";
 import MobileNavDrawer from "@/components/navigation/nav-drawer";
-import HeaderNavSearch from "@/components/header/header-nav-search";
-import HeaderNav from "@/components/header/header-nav";
+import HeaderNavSearch from "@/components/navigation/header-nav-search";
+import HeaderNav from "@/components/navigation/header-nav";
 import ThemeToggle from "@/components/header/theme-switcher";
 
 export default function Header() {

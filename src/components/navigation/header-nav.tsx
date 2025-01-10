@@ -11,7 +11,8 @@ import {
 import React from "react";
 import { Signature } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { Category } from "@/types/Category";
+import { mapCategoriesToNavItems } from "@/components/navigation/nav-utils";
+import { handleError } from "@/utils/handleError";
 
 type NavItem = {
     title: string;
@@ -40,20 +41,16 @@ export default function HeaderNav() {
 
     if (loading) return null; // Avoid rendering navigation while loading
     if (error) {
-        console.error("Error loading categories:", error.message);
+        const resolvedError = handleError(error);
+        console.error("Error loading categories:", resolvedError.message);
         return null; // Optionally render an error fallback
     }
 
-    // Populate the "User Guides" menu with categories and descriptions
     const navMain = navMainData.map((item) => {
         if (item.title === "User Guides") {
             return {
                 ...item,
-                items: categories.map((category) => ({
-                    title: category.name,
-                    url: `/user-guide/category/${category.slug}`,
-                    description: category.description || "No description available.",
-                })),
+                items: mapCategoriesToNavItems(categories), // Use mapper
             };
         }
         return item;
