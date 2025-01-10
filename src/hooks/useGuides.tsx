@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { UserGuide } from "@/types/UserGuide";
-import { fetchGuides } from "@/app/api/guides";
+import { fetchGuides } from "@/api/guides";
 import { handleError } from "@/utils/handleError";
 
 export function useGuides(): {
