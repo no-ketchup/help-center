@@ -56,8 +56,14 @@ export default function HeaderNav() {
         return item;
     });
 
-    if (pathname === "/" || pathname === "/search" || pathname === "/user-guide") return null;
-
+    if (
+        pathname === "/" ||
+        pathname === "/search" ||
+        pathname.startsWith("/guide") || // Match /guide and /guide/[slug]
+        pathname.startsWith("/category") // Match /category and /category/[slug]
+    ) {
+        return null;
+    }
     return (
         <div className="hidden md:flex w-full justify-end gap-4">
             <NavigationMenu>

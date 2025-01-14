@@ -12,7 +12,7 @@ export default function HeaderNavSearch() {
     const router = useRouter();
     const pathname = usePathname();
 
-    if (pathname === "/" || pathname === "/search" || pathname === "/user-guide") return null;
+    if (pathname === "/" || pathname === "/search ") return null;
 
     const handleSearchSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -24,7 +24,13 @@ export default function HeaderNavSearch() {
     };
 
     return (
-        <div className="relative flex items-center justify-end">
+        <div
+            className={`relative flex items-center justify-end ${
+                pathname.startsWith("/guide") || pathname.startsWith("/category")
+                    ? "lg:hidden"
+                    : ""
+            }`}
+        >
             <form
                 onSubmit={handleSearchSubmit}
                 className={`flex items-center gap-0 transition-all duration-100 ${
@@ -57,7 +63,7 @@ export default function HeaderNavSearch() {
                             className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
                             aria-label="Clear Search Field"
                         >
-                            <Eraser className="w-4 h-4" />
+                            <Eraser className="w-4 h-4"/>
                         </Button>
                     )}
                 </div>
@@ -78,7 +84,7 @@ export default function HeaderNavSearch() {
                     }`}
                     aria-label="Submit Search"
                 >
-                    <Search className="h-8 w-8" />
+                    <Search className="h-8 w-8"/>
                 </Button>
 
                 {/* Close Button */}
@@ -94,7 +100,7 @@ export default function HeaderNavSearch() {
                         className="transition-transform hover:scale-110"
                         aria-label="Close Search"
                     >
-                        <X className="w-6 h-6" />
+                        <X className="w-6 h-6"/>
                     </Button>
                 )}
             </form>

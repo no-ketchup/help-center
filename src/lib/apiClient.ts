@@ -1,12 +1,16 @@
 import axios from 'axios';
 
-const API_URL = process.env.PAYLOAD_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
 const API_KEY = process.env.PAYLOAD_API_KEY;
+
+if (!API_URL || !API_KEY) {
+    console.error('Missing API configuration! Check your .env.local file.');
+}
 
 const apiClient = axios.create({
     baseURL: API_URL,
     headers: {
-        'Authorization': `users API-Key ${API_KEY}`, // Pass API key in headers
+        'Authorization': `users API-Key ${API_KEY}`, // Add API key in headers
         'Content-Type': 'application/json',
     },
 });

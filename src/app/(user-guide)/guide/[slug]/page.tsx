@@ -5,7 +5,7 @@ import GuideMedia from "@/components/guide-page/guide-media";
 import NotFoundCatchAll from "@/app/[...not_found]/page";
 import { UserGuide } from "@/types/UserGuide";
 import { Category } from "@/types/Category";
-import {Media} from "@/types/Media";
+import { Media } from "@/types/Media";
 
 
 type Params = {

@@ -6,7 +6,7 @@ export default function QuickLinks() {
     return (
         <section className="grid grid-cols-1 gap-4 sm:grid-cols-3 uppercase">
             {/* User Guide */}
-            <Link href="/user-guide" className="flex items-center gap-3 p-2 transition">
+            <Link href="/category" className="flex items-center gap-3 p-2 transition">
                 <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 hover:scale-110">
                     <Collection
                         className="w-full h-full"

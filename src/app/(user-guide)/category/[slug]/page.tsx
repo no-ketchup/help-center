@@ -1,47 +1,47 @@
-import { fetchGuidesByCategory } from "@/api/guides";
+import { handleError } from "@/utils/handleError";
 import { fetchCategoryBySlug } from "@/api/categories";
+import { fetchGuidesByCategory } from "@/api/guides";
+import NotFoundCatchAll from "@/app/[...not_found]/page";
 import { UserGuide } from "@/types/UserGuide";
 import { Category } from "@/types/Category";
 
-type Props = {
-    params: { slug: string };
-};
-
-export default async function CategoryPage(props: Props) {
-    const { slug } = await Promise.resolve(props.params); // Await the params
+export default async function CategoryPage({ params }: { params: { slug: string } }) {
+// Resolve params asynchronously to handle Next.js 15+ behavior
+    const { slug } = await Promise.resolve(params);
 
     try {
         // Fetch the category details
         const category: Category | null = await fetchCategoryBySlug(slug);
 
         if (!category) {
-            return (
-                <div className="space-y-6">
-                    <h2 className="text-2xl font-bold">Category not found</h2>
-                    <p className="text-gray-500">Please check the URL and try again.</p>
-                </div>
-            );
+            return NotFoundCatchAll();
         }
 
-        // Fetch the guides in the category
+        // Fetch guides associated with the category
         const guides: UserGuide[] = await fetchGuidesByCategory(slug);
 
         return (
             <div className="space-y-6">
+                {/* Category Title */}
                 <h2 className="text-2xl font-bold">
-                    {category.name}{" "}
+                    {category.name}
                     {guides.length > 0 &&
-                        `(${guides.length} ${
+                        ` (${guides.length} ${
                             guides.length === 1 ? "article included" : "articles included"
                         })`}
                 </h2>
-                <p className="text-gray-500">{category.description ?? "No description available for this category."}</p>
 
+                {/* Category Description */}
+                <p className="text-gray-500">
+                    {category.description ?? "No description available for this category."}
+                </p>
+
+                {/* Guides List */}
                 <ul className="space-y-4">
                     {guides.map((guide: UserGuide) => (
                         <li key={guide.id}>
                             <a
-                                href={`/user-guide/guide/${guide.slug}`}
+                                href={`/guide/${guide.slug}`}
                                 className="text-blue-500 hover:underline"
                             >
                                 {guide.title}
@@ -51,16 +51,17 @@ export default async function CategoryPage(props: Props) {
                 </ul>
             </div>
         );
-    } catch (error) {
-        let errorMessage = "An unknown error occurred.";
-        if (error instanceof Error) {
-            errorMessage = error.message;
-        }
+    } catch (err) {
+        const error = handleError(err);
+        console.error("Error in CategoryPage:", error.message);
 
         return (
             <div className="space-y-6">
+                {/* Error Title */}
                 <h2 className="text-2xl font-bold">Error loading category</h2>
-                <p className="text-gray-500">{errorMessage}</p>
+
+                {/* Error Message */}
+                <p className="text-gray-500">{error.message}</p>
             </div>
         );
     }
