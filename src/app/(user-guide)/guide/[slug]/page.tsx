@@ -9,7 +9,7 @@ import { Media } from "@/types/Media";
 
 
 type Params = {
-    params: { slug: string };
+    params: Promise<{ slug: string }>; // Updated to handle async params
 };
 
 export async function generateStaticParams() {
@@ -20,7 +20,10 @@ export async function generateStaticParams() {
 }
 
 export default async function GuidePage({ params }: Params) {
-    const guide = await fetchGuideBySlug(params.slug);
+    // Resolve params asynchronously to handle Next.js 15+ behavior
+    const { slug } = await Promise.resolve(params);
+
+    const guide = await fetchGuideBySlug(slug);
 
     if (!guide) return NotFoundCatchAll();
 

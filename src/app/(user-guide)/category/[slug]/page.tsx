@@ -5,7 +5,12 @@ import NotFoundCatchAll from "@/app/[...not_found]/page";
 import { UserGuide } from "@/types/UserGuide";
 import { Category } from "@/types/Category";
 
-export default async function CategoryPage({ params }: { params: { slug: string } }) {
+type Props = {
+    params: Promise<{ slug: string }>; // Explicitly define params as a Promise
+};
+
+
+export default async function CategoryPage({ params }: Props) {
 // Resolve params asynchronously to handle Next.js 15+ behavior
     const { slug } = await Promise.resolve(params);
 
