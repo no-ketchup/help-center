@@ -14,7 +14,7 @@ export default function QuickLinks() {
                         strokeWidth={2}
                     />
                 </div>
-                <h2 className="text-base sm:text-lg md:text-xl font-medium leading-none hover:underline">
+                <h2 className="text-base sm:text-sm md:text-xl font-medium leading-none hover:underline">
                     User Guides
                 </h2>
             </Link>
@@ -28,7 +28,7 @@ export default function QuickLinks() {
                         strokeWidth={2}
                     />
                 </div>
-                <h2 className="text-base sm:text-lg md:text-xl font-medium leading-none hover:underline">
+                <h2 className="text-base sm:text-sm md:text-xl font-medium leading-none hover:underline">
                     FAQ
                 </h2>
             </Link>
@@ -42,7 +42,7 @@ export default function QuickLinks() {
                         strokeWidth={2}
                     />
                 </div>
-                <h2 className="text-base sm:text-lg md:text-xl font-medium leading-none hover:underline">
+                <h2 className="text-base sm:text-sm md:text-xl font-medium leading-none hover:underline">
                     Contact Us
                 </h2>
             </Link>

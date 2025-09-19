@@ -1,7 +1,7 @@
 export interface Media {
     id: string;
-    alt: string;
-    url: string; // File URL (handled by Payload for uploads)
+    alt?: string;
+    url: string;
     createdAt: string;
-    updatedAt: string;
+    updatedAt?: string;
 }

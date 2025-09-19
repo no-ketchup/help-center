@@ -9,3 +9,4 @@ export { SidebarMenuSubButton } from './sidebar-menu-sub-button';
 export { SidebarMenuSubItem } from './sidebar-menu-sub-item';
 export { SidebarRail } from './sidebar-rail';
 export { SidebarTrigger } from './sidebar-trigger';
+export { SidebarFallback } from './sidebar-fallback';

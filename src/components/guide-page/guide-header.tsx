@@ -3,12 +3,13 @@ import React from "react";
 interface GuideHeaderProps {
     title: string;
     createdDate: string;
-    updatedDate: string;
+    updatedDate?: string;
     estimatedReadTime?: number;
     categories?: { name: string; slug: string }[];
 }
 
 function formatDate(dateString: string): string {
+    if (!dateString) return "";
     const date = new Date(dateString);
     return date.toLocaleDateString(undefined, {
         year: "numeric",
@@ -17,23 +18,27 @@ function formatDate(dateString: string): string {
     });
 }
 
-const GuideHeader: React.FC<GuideHeaderProps> = ({
-                                                     title,
-                                                     createdDate,
-                                                     updatedDate,
-                                                     estimatedReadTime,
-                                                     categories = [],
-                                                 }) => {
+const GuideHeader = ({
+                         title,
+                         createdDate,
+                         updatedDate,
+                         estimatedReadTime,
+                         categories = [],
+                     }: GuideHeaderProps) => {
     return (
         <header className="space-y-4">
             <h1 className="text-4xl font-bold">{title || "Untitled Guide"}</h1>
             <div className="text-sm text-gray-500 space-y-1">
-                <p>
-                    <strong>Created:</strong> {formatDate(createdDate)}
-                </p>
-                <p>
-                    <strong>Updated:</strong> {formatDate(updatedDate)}
-                </p>
+                {createdDate && (
+                    <p>
+                        <strong>Created:</strong> {formatDate(createdDate)}
+                    </p>
+                )}
+                {updatedDate && (
+                    <p>
+                        <strong>Updated:</strong> {formatDate(updatedDate)}
+                    </p>
+                )}
                 {estimatedReadTime && (
                     <p>
                         <strong>Read Time:</strong> {estimatedReadTime} mins
@@ -48,8 +53,8 @@ const GuideHeader: React.FC<GuideHeaderProps> = ({
                             className="px-2 py-1 bg-gray-200 rounded text-sm text-gray-700"
                             aria-label={`Category: ${category.name}`}
                         >
-                            {category.name}
-                        </span>
+              {category.name}
+            </span>
                     ))}
                 </div>
             )}

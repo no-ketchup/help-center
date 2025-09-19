@@ -1,43 +1,20 @@
-import { useState, useEffect } from "react";
+import { useQuery } from "@apollo/client/react";
+import { GET_CATEGORIES } from "@/lib/queries";
 import { Category } from "@/types/Category";
-import { fetchCategories } from "@/api/categories";
-import { handleError } from "@/utils/handleError";
+import { GetCategoriesResponse } from "@/types/graphql";
 
-export function useCategories(): {
+type UseCategoriesResult = {
     categories: Category[];
     loading: boolean;
-    error: string | null;
-} {
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    error: Error | null;
+};
 
-    useEffect(() => {
-        let isMounted = true;
+export function useCategories(): UseCategoriesResult {
+    const { data, loading, error } = useQuery<GetCategoriesResponse>(GET_CATEGORIES);
 
-        const fetchData = async () => {
-            try {
-                const data = await fetchCategories();
-                if (isMounted) {
-                    setCategories(data);
-                }
-            } catch (err) {
-                if (isMounted) {
-                    setError(handleError(err).message);
-                }
-            } finally {
-                if (isMounted) {
-                    setLoading(false);
-                }
-            }
-        };
-
-        void fetchData();
-
-        return () => {
-            isMounted = false;
-        };
-    }, []);
-
-    return { categories, loading, error };
+    return {
+        categories: data?.categories ?? [],
+        loading,
+        error: error ?? null,
+    };
 }

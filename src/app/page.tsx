@@ -8,8 +8,8 @@ export default function LaunchPage() {
             <section className="flex flex-col gap-y-6">
                 <div className="text-left w-full">
                     {/* Main Title */}
-                    <h1 className="text-3xl sm:text-4xl py-4 md:text-6xl font-medium tracking-tight">
-                        How can we be of assistance today?
+                    <h1 className="text-4xl sm:text-3xl py-4 md:text-6xl font-medium tracking-tight">
+                        How can we be of assistance?
                     </h1>
                     {/* Subtitle */}
                     <p className="text-lg sm:text-xl text-gray-600">

@@ -1,12 +1,10 @@
-import apiClient from "@/lib/apiClient";
+import { useQuery } from "@apollo/client/react";
+import { GET_CATEGORIES, GET_CATEGORY } from "@/lib/queries";
 
+export function useCategories() {
+    return useQuery(GET_CATEGORIES);
+}
 
-export const fetchCategories = async () => {
-    const response = await apiClient.get("/api/categories");
-    return response.data.docs || [];
-};
-
-export const fetchCategoryBySlug = async (slug: string) => {
-    const response = await apiClient.get(`/api/categories?where[slug][equals]=${slug}`);
-    return response.data.docs[0] || null;
-};
+export function useCategoryBySlug(slug: string) {
+    return useQuery(GET_CATEGORY, { variables: { slug } });
+}

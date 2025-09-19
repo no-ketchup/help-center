@@ -15,32 +15,36 @@ import cn from "classnames";
 
 const CATEGORY_STATE_KEY = "sidebar-category-state";
 
+export type NavItem = {
+    title: string;
+    url?: string;
+    icon?: (props: React.SVGProps<SVGSVGElement>) => React.ReactNode;
+    items?: { id: string; title: string; url: string; description?: string }[];
+
+    // made optional so fallback skeletons don’t break
+    isCategoryCollapsed?: boolean;
+    toggleCategoryCollapse?: () => void;
+};
+
 export default function NavContent({
                                        items,
                                        isCollapsed,
                                    }: {
-    items: {
-        title: string;
-        url?: string;
-        icon?: (props: React.SVGProps<SVGSVGElement>) => React.ReactNode;
-        items?: { title: string; url: string }[];
-    }[];
+    items: NavItem[];
     isCollapsed: boolean;
 }) {
     // Persistent state for categories
     const [categoryState, setCategoryState] = useState<Record<string, boolean>>({});
     const [hasHydrated, setHasHydrated] = useState(false); // Avoid hydration mismatch
 
-    // Initialize state from localStorage
     useEffect(() => {
         const storedState = localStorage.getItem(CATEGORY_STATE_KEY);
         if (storedState) {
             setCategoryState(JSON.parse(storedState));
         }
-        setHasHydrated(true); // Mark hydration as complete
+        setHasHydrated(true);
     }, []);
 
-    // Save state to localStorage when it changes
     useEffect(() => {
         if (hasHydrated) {
             localStorage.setItem(CATEGORY_STATE_KEY, JSON.stringify(categoryState));
@@ -59,28 +63,30 @@ export default function NavContent({
             {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                     {isCollapsed ? (
-                        // Render only the icons in collapsed state
                         <SidebarMenuButton asChild>
                             <a
                                 href={item.url}
                                 className="flex items-center justify-center p-2 rounded-md hover:bg-muted dark:hover:bg-muted/80"
-                                title={item.title} // Add tooltip for better accessibility
+                                title={item.title}
                             >
                                 {item.icon && (
-                                    <item.icon
-                                        stroke="currentColor"
-                                        strokeWidth={2}
-                                        className="w-6 h-6"
-                                    />
+                                    <item.icon stroke="currentColor" strokeWidth={2} className="w-6 h-6" />
                                 )}
                             </a>
                         </SidebarMenuButton>
                     ) : hasHydrated && item.items ? (
-                        // Render collapsible menu in expanded state
                         <Collapsible
                             className="group/collapsible"
-                            open={categoryState[item.title] || false}
-                            onOpenChange={() => toggleCategory(item.title)}
+                            open={
+                                item.isCategoryCollapsed ??
+                                categoryState[item.title] ??
+                                false
+                            }
+                            onOpenChange={() =>
+                                item.toggleCategoryCollapse
+                                    ? item.toggleCategoryCollapse()
+                                    : toggleCategory(item.title)
+                            }
                         >
                             <CollapsibleTrigger asChild>
                                 <SidebarMenuButton className="flex items-center">
@@ -89,7 +95,7 @@ export default function NavContent({
                                             <item.icon
                                                 stroke="currentColor"
                                                 strokeWidth={2}
-                                                className="w-6 h-6" // Consistent size
+                                                className="w-6 h-6"
                                             />
                                         )}
                                     </div>
@@ -100,11 +106,11 @@ export default function NavContent({
                             <CollapsibleContent>
                                 <SidebarMenuSub>
                                     {item.items.map((subItem) => (
-                                        <SidebarMenuSubItem key={subItem.title}>
+                                        <SidebarMenuSubItem key={subItem.id}>
                                             <SidebarMenuSubButton asChild>
                                                 <a
                                                     href={subItem.url}
-                                                    className="block p-2 text-sm rounded-lg hover:underline hover:decoration-1 hover:underline-offset-2 hover:decoration-muted hover:bg-muted dark:hover:bg-muted/80"
+                                                    className="block p-2 text-sm rounded-lg hover:underline hover:bg-muted dark:hover:bg-muted/80"
                                                 >
                                                     {subItem.title}
                                                 </a>
@@ -115,28 +121,21 @@ export default function NavContent({
                             </CollapsibleContent>
                         </Collapsible>
                     ) : (
-                        // Static link in expanded state
                         <SidebarMenuButton asChild>
                             <a
                                 href={item.url}
                                 className={cn(
-                                    "flex items-center p-2 rounded-md transition-all duration-200 hover:underline hover:decoration-2 hover:underline-offset-4 hover:bg-muted dark:hover:bg-muted/80",
-                                    isCollapsed ? "justify-center" : "" // Center the icon in collapsed state
+                                    "flex items-center p-2 rounded-md transition-all duration-200 hover:underline hover:bg-muted dark:hover:bg-muted/80",
+                                    isCollapsed ? "justify-center" : ""
                                 )}
-                                title={isCollapsed ? item.title : undefined} // Tooltip for collapsed state
+                                title={isCollapsed ? item.title : undefined}
                             >
                                 {item.icon && (
-                                    <div
-                                        className="flex-shrink-0 w-6 h-6 flex items-center justify-center"
-                                    >
-                                        <item.icon
-                                            stroke="currentColor"
-                                            strokeWidth={2}
-                                            className="w-6 h-6"
-                                        />
+                                    <div className="flex-shrink-0 w-6 h-6 flex items-center justify-center">
+                                        <item.icon stroke="currentColor" strokeWidth={2} className="w-6 h-6" />
                                     </div>
                                 )}
-                                {!isCollapsed && <span className="ml-2">{item.title}</span>} {/* Hide text in collapsed state */}
+                                {!isCollapsed && <span className="ml-2">{item.title}</span>}
                             </a>
                         </SidebarMenuButton>
                     )}

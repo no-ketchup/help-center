@@ -17,17 +17,17 @@ export type HomepageFeature = {
 export const homepageFeatures: HomepageFeature[] = [
     {
         icon: "BookOpenText",
-        title: "ユーザーガイド",
+        title: "guide",
         link: "/guide",
     },
     {
         icon: "CircleHelp",
-        title: "よくある質問",
+        title: "faq",
         link: "/faq",
     },
     {
         icon: "MessagesSquare",
-        title: "お問い合わせ",
+        title: "contact-us",
         link: "/contact-support",
     },
 ];

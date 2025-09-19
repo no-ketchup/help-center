@@ -24,7 +24,10 @@ export default function MobileNavDrawer() {
     };
 
     const resolvedError = error ? handleError(error) : null;
-    const categoryNavItems = !loading && !resolvedError ? mapCategoriesToNavItems(categories) : [];
+
+    const categoryNavItems = !loading && !resolvedError
+        ? mapCategoriesToNavItems(categories)
+        : [];
 
     return (
         <div className="lg:hidden">
@@ -74,7 +77,7 @@ export default function MobileNavDrawer() {
                                     {!loading && !resolvedError && categoryNavItems.length > 0 && (
                                         <ul className="mt-2 border-l border-dotted space-y-1">
                                             {categoryNavItems.map((item) => (
-                                                <li key={item.url}>
+                                                <li key={item.id}>
                                                     <Link
                                                         href={item.url || "#"}
                                                         className="block text-sm p-1 pl-4 text-gray-800 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600"

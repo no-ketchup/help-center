@@ -1,9 +1,15 @@
 "use client";
 
-import { Sidebar, SidebarContent, SidebarRail, useSidebar } from "../ui/sidebar";
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFallback,
+    SidebarRail,
+    useSidebar,
+} from "../ui/sidebar";
 import NavContent from "./nav-content";
 import { useCategories } from "@/hooks/useCategories";
-import React, {SVGProps, useEffect, useState} from "react";
+import React, { Suspense, SVGProps, useEffect, useState, useRef } from "react";
 import { Collection, Question, Comment } from "../svgs";
 import { SearchForm } from "@/components/navigation/search-form";
 import { mapCategoriesToNavItems } from "@/components/navigation/nav-utils";
@@ -13,25 +19,13 @@ type NavItem = {
     title: string;
     url?: string;
     icon?: (props: SVGProps<SVGSVGElement>) => React.ReactNode;
-    items?: { title: string; url: string }[];
+    items?: { id: string; title: string; url: string; description?: string }[];
 };
 
 const navMainData: NavItem[] = [
-    {
-        title: "User Guides",
-        icon: Collection,
-        items: [],
-    },
-    {
-        title: "FAQs",
-        url: "/faq",
-        icon: Question,
-    },
-    {
-        title: "Contact",
-        url: "/contact",
-        icon: Comment,
-    },
+    { title: "User Guides", icon: Collection, items: [] },
+    { title: "FAQs", url: "/faq", icon: Question },
+    { title: "Contact", url: "/contact", icon: Comment },
 ];
 
 const CATEGORY_COLLAPSE_KEY = "userGuideCategories:collapsed";
@@ -39,70 +33,107 @@ const CATEGORY_COLLAPSE_KEY = "userGuideCategories:collapsed";
 export function AppSidebar() {
     const { categories, loading, error } = useCategories();
     const { isCollapsed } = useSidebar();
-    const [isReady, setIsReady] = useState(false); // Tracks whether localStorage is ready
-    const [categoryCollapseState, setCategoryCollapseState] = useState<Record<string, boolean>>({});
 
+    const [categoryCollapseState, setCategoryCollapseState] = useState<Record<string, boolean>>({});
+    const [isHydrated, setIsHydrated] = useState(false);
+    const saveTimeout = useRef<NodeJS.Timeout | null>(null);
+
+    // Hydrate collapse state on client
     useEffect(() => {
-        // Sync with localStorage after the component mounts
-        const savedState = localStorage.getItem(CATEGORY_COLLAPSE_KEY);
-        setCategoryCollapseState(savedState ? JSON.parse(savedState) : {});
-        setIsReady(true); // Mark as ready
+        try {
+            const savedState = localStorage.getItem(CATEGORY_COLLAPSE_KEY);
+            if (savedState) {
+                setCategoryCollapseState(JSON.parse(savedState));
+            }
+        } catch (e) {
+            console.warn("Failed to load sidebar collapse state", e);
+        } finally {
+            setIsHydrated(true);
+        }
     }, []);
+
+    // Debounced save to localStorage
+    const saveToLocalStorage = (newState: Record<string, boolean>) => {
+        if (saveTimeout.current) clearTimeout(saveTimeout.current);
+        saveTimeout.current = setTimeout(() => {
+            localStorage.setItem(CATEGORY_COLLAPSE_KEY, JSON.stringify(newState));
+        }, 300); // 300ms debounce
+    };
 
     const toggleCategoryCollapse = (category: string) => {
         setCategoryCollapseState((prev) => {
             const newState = { ...prev, [category]: !prev[category] };
-            localStorage.setItem(CATEGORY_COLLAPSE_KEY, JSON.stringify(newState));
+            saveToLocalStorage(newState);
             return newState;
         });
     };
 
-    // Handle loading or error states for categories
+    // Loading skeleton
     if (loading) {
-        return <div>Loading categories...</div>;
+        return (
+            <Sidebar>
+                <SidebarContent>
+                    <SidebarFallback
+                        isCollapsed={isCollapsed}
+                        categoryCollapseState={isHydrated ? categoryCollapseState : {}}
+                    />
+                </SidebarContent>
+                <SidebarRail />
+            </Sidebar>
+        );
     }
 
+    // Error state
     if (error) {
         const resolvedError = handleError(error);
-        return <div>Error loading categories: {resolvedError.message}</div>;
+        return (
+            <Sidebar>
+                <SidebarContent>
+                    <div className="p-4 text-sm text-red-500">
+                        Error loading categories: {resolvedError.message}
+                    </div>
+                </SidebarContent>
+                <SidebarRail />
+            </Sidebar>
+        );
     }
 
+    const safeCategories = (categories || []).map((c) => ({
+        ...c,
+        key: `${c.slug}-${c.id}`,
+    }));
 
-    // Dynamically populate categories into the navigation
-    const navMain = navMainData.map((item) => {
-        if (item.title === "User Guides") {
-            return {
-                ...item,
-                items: mapCategoriesToNavItems(categories), // Use mapper
-            };
-        }
-        return item;
-    });
-
-    if (!isReady) {
-        // Render a placeholder or nothing until localStorage is ready
-        return null;
-    }
+    const navMain = navMainData.map((item) =>
+        item.title === "User Guides"
+            ? { ...item, items: mapCategoriesToNavItems(safeCategories) }
+            : item
+    );
 
     return (
-            <div className="hidden lg:flex">
         <Sidebar>
             <SidebarContent>
-                {/* Search Section */}
                 <SearchForm isCollapsed={isCollapsed} />
-                {/* Navigation */}
-                <NavContent
-                    items={navMain.map((item) => ({
-                        ...item,
-                        icon: item.icon,
-                        isCategoryCollapsed: categoryCollapseState[item.title] ?? false,
-                        toggleCategoryCollapse: () => toggleCategoryCollapse(item.title),
-                    }))}
-                    isCollapsed={isCollapsed}
-                />
+
+                <Suspense
+                    fallback={
+                        <SidebarFallback
+                            isCollapsed={isCollapsed}
+                            categoryCollapseState={isHydrated ? categoryCollapseState : {}}
+                        />
+                    }
+                >
+                    <NavContent
+                        items={navMain.map((item) => ({
+                            ...item,
+                            icon: item.icon,
+                            isCategoryCollapsed: categoryCollapseState[item.title] ?? false,
+                            toggleCategoryCollapse: () => toggleCategoryCollapse(item.title),
+                        }))}
+                        isCollapsed={isCollapsed}
+                    />
+                </Suspense>
             </SidebarContent>
             <SidebarRail />
         </Sidebar>
-            </div>
     );
 }

@@ -1,18 +1,10 @@
-import axios from 'axios';
+import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 
-const API_URL = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
-const API_KEY = process.env.PAYLOAD_API_KEY;
-
-if (!API_URL || !API_KEY) {
-    console.error('Missing API configuration! Check your .env.local file.');
-}
-
-const apiClient = axios.create({
-    baseURL: API_URL,
-    headers: {
-        'Authorization': `users API-Key ${API_KEY}`, // Add API key in headers
-        'Content-Type': 'application/json',
-    },
+const client = new ApolloClient({
+    link: new HttpLink({
+        uri: process.env.NEXT_PUBLIC_GRAPHQL_URL || "http://localhost:8000/graphql",
+    }),
+    cache: new InMemoryCache(),
 });
 
-export default apiClient;
+export default client;

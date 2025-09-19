@@ -2,10 +2,12 @@ import React from "react";
 import Image from "next/image";
 
 interface GuideMediaProps {
-    media: { url: string; title: string; alt?: string }[];
+    media: { url: string; title?: string; alt?: string }[];
 }
 
-const GuideMedia: React.FC<GuideMediaProps> = ({ media }) => {
+const GuideMedia = ({ media }: GuideMediaProps) => {
+    if (!media || media.length === 0) return null;
+
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {media.map((item, index) => (
@@ -17,7 +19,9 @@ const GuideMedia: React.FC<GuideMediaProps> = ({ media }) => {
                         height={300}
                         className="rounded"
                     />
-                    <figcaption className="text-sm text-gray-500">{item.title}</figcaption>
+                    {item.title && (
+                        <figcaption className="text-sm text-gray-500">{item.title}</figcaption>
+                    )}
                 </figure>
             ))}
         </div>

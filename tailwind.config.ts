@@ -25,15 +25,11 @@ export default {
     			footer: '50',
     			backToTop: '90'
     		},
-    		fontFamily: {
-    			sans: [
-    				'IBM Plex Sans',
-					'IBM Plex Serif',
-					'IBM Plex Mono',
-    				'Arial',
-    				'sans-serif'
-    			]
-    		},
+			fontFamily: {
+				sans: ["var(--font-plex-sans)", "sans-serif"],
+				mono: ["var(--font-plex-mono)", "monospace"],
+				serif: ["var(--font-plex-serif)", "serif"],
+	    		},
     		fontSize: {
     			'footer-font': '0.9375rem'
     		},

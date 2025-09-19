@@ -1,10 +1,14 @@
-import { fetchCategories } from "@/api/categories";
-import { Category } from "@/types/Category";
+import client from "@/lib/apiClient";
+import { GET_CATEGORIES } from "@/lib/queries";
+import { GetCategoriesResponse } from "@/types/graphql";
 
 export default async function AllCategoriesPage() {
     try {
-        // Fetch all categories
-        const categories = await fetchCategories();
+        const { data } = await client.query<GetCategoriesResponse>({
+            query: GET_CATEGORIES,
+        });
+
+        const categories = data?.categories || [];
 
         return (
             <div className="p-6 space-y-6">
@@ -18,7 +22,7 @@ export default async function AllCategoriesPage() {
 
                 {/* Categories Section */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
-                    {categories.map((category: Category) => (
+                    {categories.map((category) => (
                         <a
                             key={category.id}
                             href={`/category/${category.slug}`}

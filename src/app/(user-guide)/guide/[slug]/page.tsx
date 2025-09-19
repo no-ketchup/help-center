@@ -1,63 +1,59 @@
-import { fetchGuideBySlug, fetchGuides } from "@/api/guides";
+import client from "@/lib/apiClient";
+import { GET_GUIDES, GET_GUIDE } from "@/lib/queries";
 import GuideHeader from "@/components/guide-page/guide-header";
 import GuideBody from "@/components/guide-page/guide-body";
 import GuideMedia from "@/components/guide-page/guide-media";
 import NotFoundCatchAll from "@/app/[...not_found]/page";
-import { UserGuide } from "@/types/UserGuide";
-import { Category } from "@/types/Category";
-import { Media } from "@/types/Media";
-
+import { GetGuidesResponse, GetGuideResponse } from "@/types/graphql";
 
 type Params = {
-    params: Promise<{ slug: string }>; // Updated to handle async params
+    params: Promise<{ slug: string }>;
 };
 
+// Generate static paths for guides
 export async function generateStaticParams() {
-    const guides = await fetchGuides();
-    return guides.map((guide: UserGuide) => ({
+    const { data } = await client.query<GetGuidesResponse>({
+        query: GET_GUIDES,
+    });
+
+    return (data?.guides || []).map((guide) => ({
         slug: guide.slug,
     }));
 }
 
 export default async function GuidePage({ params }: Params) {
-    // Resolve params asynchronously to handle Next.js 15+ behavior
-    const { slug } = await Promise.resolve(params);
+    const { slug } = await params;
 
-    const guide = await fetchGuideBySlug(slug);
+    const { data } = await client.query<GetGuideResponse>({
+        query: GET_GUIDE,
+        variables: { slug },
+    });
 
+    const guide = data?.guide;
     if (!guide) return NotFoundCatchAll();
-
-    const {
-        title = "Untitled",
-        createdAt: createdDate = "",
-        updatedAt: updatedDate = "",
-        estimatedReadTime,
-        body,
-        categories = [],
-        media = [],
-    } = guide;
-
-    const transformedCategories = categories.map((category: Category) => ({
-        name: category.name ?? "Unnamed Category",
-        slug: category.slug ?? "unknown-category",
-    }));
-
-    const transformedMedia = media.map((item: Media) => ({
-        url: item.url ?? "",
-        title: item.alt ?? "Untitled Media",
-    }));
 
     return (
         <>
             <GuideHeader
-                title={title}
-                createdDate={createdDate}
-                updatedDate={updatedDate}
-                estimatedReadTime={estimatedReadTime}
-                categories={transformedCategories}
+                title={guide.title}
+                createdDate={guide.createdAt}
+                updatedDate={guide.updatedAt}
+                estimatedReadTime={guide.estimatedReadTime}
+                categories={guide.categories.map((c) => ({
+                    name: c.name ?? "Unnamed Category",
+                    slug: c.slug ?? "unknown-category",
+                }))}
             />
-            <GuideBody body={body} />
-            {transformedMedia.length > 0 && <GuideMedia media={transformedMedia} />}
+            <GuideBody body={guide.body} />
+            {guide.media.length > 0 && (
+                <GuideMedia
+                    media={guide.media.map((m) => ({
+                        url: m.url ?? "",
+                        title: m.alt ?? "Untitled Media",
+                        alt: m.alt,
+                    }))}
+                />
+            )}
         </>
     );
 }

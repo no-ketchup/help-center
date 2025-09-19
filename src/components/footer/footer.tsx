@@ -11,7 +11,7 @@ export default function Footer() {
             <div className="hidden md:flex justify-between flex-wrap px-4 py-4 text-sm uppercase gap-4">
                 {[
                     ["Platform", "Services", "Integrations", "Affiliates"],
-                    ["Pricing", "License", "Early Access", "Newsletters"],
+                    ["Pricing", "License", "Newsletters"],
                     ["Security", "Privacy Policy", "Cookies"],
                 ].map((links, index) => (
                     <div key={index} className="flex flex-wrap gap-2">

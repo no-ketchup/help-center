@@ -1,0 +1,2 @@
+schema: "http://localhost:8000/graphql"  # Strawberry endpoint
+documents: "src/**/*.{ts,tsx,graphql}"
