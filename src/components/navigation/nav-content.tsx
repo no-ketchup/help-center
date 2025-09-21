@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import {
@@ -12,8 +11,7 @@ import {
     SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
 import cn from "classnames";
-
-const CATEGORY_STATE_KEY = "sidebar-category-state";
+import { useUIStore } from "@/store/ui-store";
 
 export type NavItem = {
     title: string;
@@ -21,7 +19,7 @@ export type NavItem = {
     icon?: (props: React.SVGProps<SVGSVGElement>) => React.ReactNode;
     items?: { id: string; title: string; url: string; description?: string }[];
 
-    // made optional so fallback skeletons don’t break
+    // passed in from AppSidebar
     isCategoryCollapsed?: boolean;
     toggleCategoryCollapse?: () => void;
 };
@@ -33,30 +31,9 @@ export default function NavContent({
     items: NavItem[];
     isCollapsed: boolean;
 }) {
-    // Persistent state for categories
-    const [categoryState, setCategoryState] = useState<Record<string, boolean>>({});
-    const [hasHydrated, setHasHydrated] = useState(false); // Avoid hydration mismatch
-
-    useEffect(() => {
-        const storedState = localStorage.getItem(CATEGORY_STATE_KEY);
-        if (storedState) {
-            setCategoryState(JSON.parse(storedState));
-        }
-        setHasHydrated(true);
-    }, []);
-
-    useEffect(() => {
-        if (hasHydrated) {
-            localStorage.setItem(CATEGORY_STATE_KEY, JSON.stringify(categoryState));
-        }
-    }, [categoryState, hasHydrated]);
-
-    const toggleCategory = (title: string) => {
-        setCategoryState((prev) => ({
-            ...prev,
-            [title]: !prev[title],
-        }));
-    };
+    // Subscribe to category state
+    const categoryState = useUIStore((s) => s.categoryState);
+    const toggleCategory = useUIStore((s) => s.toggleCategory);
 
     return (
         <SidebarMenu>
@@ -74,14 +51,10 @@ export default function NavContent({
                                 )}
                             </a>
                         </SidebarMenuButton>
-                    ) : hasHydrated && item.items ? (
+                    ) : item.items ? (
                         <Collapsible
                             className="group/collapsible"
-                            open={
-                                item.isCategoryCollapsed ??
-                                categoryState[item.title] ??
-                                false
-                            }
+                            open={categoryState[item.title] ?? false}
                             onOpenChange={() =>
                                 item.toggleCategoryCollapse
                                     ? item.toggleCategoryCollapse()

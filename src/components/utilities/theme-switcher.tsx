@@ -1,32 +1,74 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+import { useUIStore } from "@/store/ui-store";
 
-export default function ThemeToggle() {
-    const { resolvedTheme, setTheme } = useTheme();
+export default function ThemeSwitcher() {
+    const theme = useUIStore((s) => s.theme);
+    const setTheme = useUIStore((s) => s.setTheme);
+
     const [mounted, setMounted] = useState(false);
+    const [systemDark, setSystemDark] = useState(false);
 
-    useEffect(() => setMounted(true), []);
+    // Ensure client-only rendering
+    useEffect(() => {
+        setMounted(true);
+        const mq = window.matchMedia("(prefers-color-scheme: dark)");
+        setSystemDark(mq.matches);
 
-    if (!mounted) return null;
+        const listener = (e: MediaQueryListEvent) => setSystemDark(e.matches);
+        mq.addEventListener("change", listener);
+        return () => mq.removeEventListener("change", listener);
+    }, []);
+
+    // Apply theme class on <html>
+    useEffect(() => {
+        if (!mounted) return;
+        const root = document.documentElement;
+        root.classList.remove("light", "dark");
+
+        const applied =
+            theme === "light" || theme === "dark"
+                ? theme
+                : systemDark
+                    ? "dark"
+                    : "light";
+
+        root.classList.add(applied);
+    }, [theme, systemDark, mounted]);
+
+    if (!mounted) {
+        // Render a non-interactive placeholder to avoid hydration mismatch
+        return (
+            <div className="h-6 w-12 rounded-full bg-slate-200 dark:bg-charcoal" />
+        );
+    }
+
+    const isDark = theme === "dark" || (theme === "system" && systemDark);
 
     return (
         <label
             htmlFor="theme-toggle"
-            className="relative flex h-6 w-12 cursor-pointer items-center rounded-full bg-slate-100 dark:bg-charcoal transition-colors flex-shrink-0 p-1.5"
+            className={`relative flex h-6 w-12 items-center rounded-full 
+                bg-slate-100 dark:bg-charcoal transition-colors p-1.5
+                ${!mounted ? "pointer-events-none opacity-50" : "cursor-pointer"}`}
         >
-            {/* Hidden Checkbox */}
             <input
                 id="theme-toggle"
                 type="checkbox"
-                checked={resolvedTheme === "dark"}
-                onChange={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+                checked={isDark}
+                onChange={() => setTheme(isDark ? "light" : "dark")}
                 className="peer sr-only"
+                disabled={!mounted} // prevent accidental change before mount
             />
 
-            {/* Sun Icon (Visible in Light Mode) */}
-            <div className="absolute left-1 top-1/2 -translate-y-1/2 text-amber-400 transition-all duration-300 peer-checked:opacity-0 hover:scale-110 hover:rotate-5 hover:drop-shadow-[0_0_6px_rgba(255,180,0,0.8)]">
+            {/* Icons */}
+            <div
+                className={`absolute left-1 top-1/2 -translate-y-1/2 text-amber-400
+                  transition-all duration-300
+                  hover:scale-110 hover:rotate-5 hover:drop-shadow-[0_0_6px_rgba(255,180,0,0.8)]
+                  ${theme === "light" ? "opacity-100" : "opacity-0"}`}
+            >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"
@@ -80,12 +122,15 @@ export default function ThemeToggle() {
                             <rect width="145" height="135" fill="white"/>
                         </clipPath>
                     </defs>
-                </svg>
-            </div>
+                </svg>            </div>
 
-            {/* Moon Icon (Visible in Dark Mode) */}
+            {/* Moon Icon */}
             <div
-                className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-100 opacity-0 transition-all duration-300 peer-checked:opacity-100 hover:scale-110 hover:rotate-10 hover:drop-shadow-[0_0_6px_rgba(200,200,255,0.8)]">
+                className={`absolute right-1 top-1/2 -translate-y-1/2 text-gray-100
+                  transition-all duration-300
+                  hover:scale-110 hover:rotate-10 hover:drop-shadow-[0_0_6px_rgba(200,200,255,0.8)]
+                  ${theme === "dark" ? "opacity-100" : "opacity-0"}`}
+            >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"
@@ -107,7 +152,6 @@ export default function ThemeToggle() {
                     </defs>
                 </svg>
             </div>
-
         </label>
     );
 }

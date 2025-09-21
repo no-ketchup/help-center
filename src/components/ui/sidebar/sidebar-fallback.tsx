@@ -11,12 +11,20 @@ export function SidebarFallback({
 }) {
     if (isCollapsed) {
         return (
-            <div className="flex flex-col space-y-2 items-center">
-                {/* Fake search icon */}
-                <Skeleton className="h-8 w-8 rounded-md" />
-                {/* Fake nav icons */}
+            <div className="flex flex-col space-y-3 items-center">
+                {/* Search icon button stub */}
+                <div className="flex items-center justify-center h-10 w-10 rounded-md bg-muted/40 dark:bg-muted/30">
+                    <Skeleton className="h-5 w-5 rounded-sm" />
+                </div>
+
+                {/* Nav icon stubs */}
                 {[...Array(4)].map((_, i) => (
-                    <Skeleton key={i} className="h-8 w-8 rounded-md" />
+                    <div
+                        key={i}
+                        className="flex items-center justify-center h-10 w-10 rounded-md bg-muted/40 dark:bg-muted/30"
+                    >
+                        <Skeleton className="h-5 w-5 rounded-sm" />
+                    </div>
                 ))}
             </div>
         );
@@ -24,19 +32,25 @@ export function SidebarFallback({
 
     // Expanded = full nav
     return (
-        <div className="flex flex-col space-y-3">
-            {/* Fake search input */}
-            <Skeleton className="h-8 w-full rounded-md" />
+        <div className="flex flex-col space-y-5">
+            {/* Fake search form: icon button + input bar */}
+            <div className="flex items-center space-x-2">
+                <div className="flex items-center justify-center h-10 w-10 rounded-md bg-muted/40 dark:bg-muted/30">
+                    <Skeleton className="h-5 w-5 rounded-sm" />
+                </div>
+                <div className="flex-1 h-10 rounded-md border-b border-dashed border-zinc-400 dark:border-zinc-300 animate-pulse" />
+            </div>
 
-            <div className="space-y-2">
+            {/* Nav sections */}
+            <div className="space-y-3">
                 {Object.entries(categoryCollapseState).map(([title, collapsed]) => (
-                    <div key={title} className="space-y-1">
+                    <div key={title} className="space-y-2">
                         {/* Top-level nav button */}
-                        <Skeleton className="h-8 w-full rounded-md" />
+                        <Skeleton className="h-9 w-full rounded-md" />
 
                         {/* Sub-items if expanded */}
                         {!collapsed && (
-                            <div className="pl-4 space-y-1">
+                            <div className="pl-6 space-y-2">
                                 {[...Array(3)].map((_, i) => (
                                     <Skeleton key={i} className="h-6 w-3/4 rounded-md" />
                                 ))}

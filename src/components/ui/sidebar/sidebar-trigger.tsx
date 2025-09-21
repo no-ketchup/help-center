@@ -2,20 +2,21 @@
 
 import React from "react";
 import { PanelLeft } from "lucide-react";
-import { useSidebar } from "./sidebar-context";
 import { cn } from "@/lib/utils";
+import { useUIStore } from "@/store/ui-store";
 
 type SidebarTriggerProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const SidebarTrigger = ({ className, ...props }: SidebarTriggerProps) => {
-    const { toggleSidebar } = useSidebar();
+    const isCollapsed = useUIStore((s) => s.isSidebarCollapsed);
+    const setCollapsed = useUIStore((s) => s.setSidebarCollapsed);
 
     return (
         <button
-            onClick={toggleSidebar}
-            className={cn("p-2 rounded-md hover:bg-muted", className)} // Combine default and passed class names
+            onClick={() => setCollapsed(!isCollapsed)}
+            className={cn("p-2 rounded-md hover:bg-muted", className)}
             aria-label="Toggle Sidebar"
-            {...props} // Forward any additional props
+            {...props}
         >
             <PanelLeft className="w-5 h-5" />
         </button>

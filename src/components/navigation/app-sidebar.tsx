@@ -2,23 +2,22 @@
 
 import {
     Sidebar,
-    SidebarContent,
     SidebarFallback,
     SidebarRail,
-    useSidebar,
 } from "../ui/sidebar";
 import NavContent from "./nav-content";
 import { useCategories } from "@/hooks/useCategories";
-import React, { Suspense, SVGProps, useEffect, useState, useRef } from "react";
+import React, { Suspense } from "react";
 import { Collection, Question, Comment } from "../svgs";
 import { SearchForm } from "@/components/navigation/search-form";
 import { mapCategoriesToNavItems } from "@/components/navigation/nav-utils";
 import { handleError } from "@/utils/handleError";
+import { useUIStore } from "@/store/ui-store";
 
 type NavItem = {
     title: string;
     url?: string;
-    icon?: (props: SVGProps<SVGSVGElement>) => React.ReactNode;
+    icon?: (props: React.SVGProps<SVGSVGElement>) => React.ReactNode;
     items?: { id: string; title: string; url: string; description?: string }[];
 };
 
@@ -28,56 +27,20 @@ const navMainData: NavItem[] = [
     { title: "Contact", url: "/contact", icon: Comment },
 ];
 
-const CATEGORY_COLLAPSE_KEY = "userGuideCategories:collapsed";
-
 export function AppSidebar() {
     const { categories, loading, error } = useCategories();
-    const { isCollapsed } = useSidebar();
-
-    const [categoryCollapseState, setCategoryCollapseState] = useState<Record<string, boolean>>({});
-    const [isHydrated, setIsHydrated] = useState(false);
-    const saveTimeout = useRef<NodeJS.Timeout | null>(null);
-
-    // Hydrate collapse state on client
-    useEffect(() => {
-        try {
-            const savedState = localStorage.getItem(CATEGORY_COLLAPSE_KEY);
-            if (savedState) {
-                setCategoryCollapseState(JSON.parse(savedState));
-            }
-        } catch (e) {
-            console.warn("Failed to load sidebar collapse state", e);
-        } finally {
-            setIsHydrated(true);
-        }
-    }, []);
-
-    // Debounced save to localStorage
-    const saveToLocalStorage = (newState: Record<string, boolean>) => {
-        if (saveTimeout.current) clearTimeout(saveTimeout.current);
-        saveTimeout.current = setTimeout(() => {
-            localStorage.setItem(CATEGORY_COLLAPSE_KEY, JSON.stringify(newState));
-        }, 300); // 300ms debounce
-    };
-
-    const toggleCategoryCollapse = (category: string) => {
-        setCategoryCollapseState((prev) => {
-            const newState = { ...prev, [category]: !prev[category] };
-            saveToLocalStorage(newState);
-            return newState;
-        });
-    };
+    const isCollapsed = useUIStore((s) => s.isSidebarCollapsed);
+    const categoryState = useUIStore((s) => s.categoryState);
+    const toggleCategory = useUIStore((s) => s.toggleCategory);
 
     // Loading skeleton
     if (loading) {
         return (
             <Sidebar>
-                <SidebarContent>
-                    <SidebarFallback
-                        isCollapsed={isCollapsed}
-                        categoryCollapseState={isHydrated ? categoryCollapseState : {}}
-                    />
-                </SidebarContent>
+                <SidebarFallback
+                    isCollapsed={isCollapsed}
+                    categoryCollapseState={categoryState}
+                />
                 <SidebarRail />
             </Sidebar>
         );
@@ -88,11 +51,9 @@ export function AppSidebar() {
         const resolvedError = handleError(error);
         return (
             <Sidebar>
-                <SidebarContent>
-                    <div className="p-4 text-sm text-red-500">
-                        Error loading categories: {resolvedError.message}
-                    </div>
-                </SidebarContent>
+                <div className="p-4 text-sm text-red-500">
+                    Error loading categories: {resolvedError.message}
+                </div>
                 <SidebarRail />
             </Sidebar>
         );
@@ -111,28 +72,25 @@ export function AppSidebar() {
 
     return (
         <Sidebar>
-            <SidebarContent>
-                <SearchForm isCollapsed={isCollapsed} />
-
-                <Suspense
-                    fallback={
-                        <SidebarFallback
-                            isCollapsed={isCollapsed}
-                            categoryCollapseState={isHydrated ? categoryCollapseState : {}}
-                        />
-                    }
-                >
-                    <NavContent
-                        items={navMain.map((item) => ({
-                            ...item,
-                            icon: item.icon,
-                            isCategoryCollapsed: categoryCollapseState[item.title] ?? false,
-                            toggleCategoryCollapse: () => toggleCategoryCollapse(item.title),
-                        }))}
+            <SearchForm isCollapsed={isCollapsed} />
+            <Suspense
+                fallback={
+                    <SidebarFallback
                         isCollapsed={isCollapsed}
+                        categoryCollapseState={categoryState}
                     />
-                </Suspense>
-            </SidebarContent>
+                }
+            >
+                <NavContent
+                    items={navMain.map((item) => ({
+                        ...item,
+                        icon: item.icon,
+                        isCategoryCollapsed: categoryState[item.title] ?? false,
+                        toggleCategoryCollapse: () => toggleCategory(item.title),
+                    }))}
+                    isCollapsed={isCollapsed}
+                />
+            </Suspense>
             <SidebarRail />
         </Sidebar>
     );

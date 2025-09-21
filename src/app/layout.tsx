@@ -1,6 +1,5 @@
 import Header from "../components/header/header";
 import Footer from "../components/footer/footer";
-import { ThemeProvider } from "next-themes";
 import type { Metadata } from "next";
 import { UpdateLayoutVariables } from "@/components/utilities/update-layout-variables";
 import ApolloWrapper from "@/components/providers/apollo-wrapper";
@@ -46,49 +45,55 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             suppressHydrationWarning
         >
         <head>
+            {/* Preload script: apply theme + sidebar state before hydration */}
             <script
                 dangerouslySetInnerHTML={{
                     __html: `
 (function() {
   try {
-    var theme = localStorage.getItem('theme');
-    if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    var store = localStorage.getItem('ui-store');
+    var parsed = store ? JSON.parse(store) : {};
+    var state = parsed?.state || {};
+
+    // Theme
+    var t = state.theme || 'system';
+    if (t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
+
+    // Sidebar
+    if (state.isSidebarCollapsed) {
+      document.documentElement.classList.add('sidebar-collapsed');
+    } else {
+      document.documentElement.classList.remove('sidebar-collapsed');
+    }
   } catch (_) {}
 })();
-            `,
+                    `,
                 }}
             />
         </head>
         <body className="antialiased flex flex-col">
-        <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-        >
-            <ApolloWrapper>
-                <UpdateLayoutVariables />
+        <ApolloWrapper>
+            <UpdateLayoutVariables />
 
-                {/* Global Header */}
-                <div className="w-full max-w-screen-xl mx-auto px-0">
-                    <Header />
-                </div>
+            {/* Header */}
+            <div className="w-full max-w-screen-xl mx-auto px-0">
+                <Header />
+            </div>
 
-                {/* Main Container */}
-                <div className="flex flex-col w-screen min-h-screen px-0">
-                    <main className="flex flex-1 flex-col relative">{children}</main>
-                </div>
+            {/* Main */}
+            <div className="flex flex-col w-screen min-h-screen px-0">
+                <main className="flex flex-1 flex-col relative">{children}</main>
+            </div>
 
-                {/* Global Footer */}
-                <div className="w-full max-w-screen-xl mx-auto px-0">
-                    <Footer />
-                </div>
-            </ApolloWrapper>
-        </ThemeProvider>
+            {/* Footer */}
+            <div className="w-full max-w-screen-xl mx-auto px-0">
+                <Footer />
+            </div>
+        </ApolloWrapper>
         </body>
         </html>
     );

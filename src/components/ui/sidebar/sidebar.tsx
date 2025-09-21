@@ -1,13 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { useSidebar } from "./sidebar-context";
+import { useUIStore } from "@/store/ui-store";
 
 type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
     children: React.ReactNode;
-    width?: string; // Default sidebar width
-    collapsedWidth?: string; // Width when collapsed
-    headerHeight?: string; // Header height to respect
-    footerHeight?: string; // Footer height to respect
+    width?: string;
+    collapsedWidth?: string;
 };
 
 export const Sidebar = ({
@@ -17,17 +15,27 @@ export const Sidebar = ({
                             className,
                             ...props
                         }: SidebarProps) => {
-    const { isCollapsed } = useSidebar(); // Get the collapsed state
+    const isCollapsed = useUIStore((s) => s.isSidebarCollapsed);
+
+    // Track hydration
+    const [hydrated, setHydrated] = useState(false);
+
+    useEffect(() => {
+        setHydrated(true);
+    }, []);
+
+    // Pre-hydration fallback: match RootLayout preload class
+    const collapsed = hydrated
+        ? isCollapsed
+        : document.documentElement.classList.contains("sidebar-collapsed");
 
     return (
         <div
             className={cn(
-                "relative flex-shrink-0 transition-[width] duration-300 ease-in-out bg-sidebar text-sidebar-foreground",
+                "relative flex flex-col flex-shrink-0 transition-[width] duration-300 ease-in-out bg-sidebar text-sidebar-foreground",
                 className
             )}
-            style={{
-                width: isCollapsed ? collapsedWidth : width,
-            }}
+            style={{ width: collapsed ? collapsedWidth : width }}
             {...props}
         >
             {children}

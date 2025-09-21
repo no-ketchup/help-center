@@ -6,7 +6,7 @@ import { Logo } from "../svgs";
 import MobileNavDrawer from "@/components/navigation/nav-drawer";
 import HeaderNavSearch from "@/components/navigation/header-nav-search";
 import HeaderNav from "@/components/navigation/header-nav";
-import ThemeToggle from "@/components/header/theme-switcher";
+import ThemeToggle from "@/components/utilities/theme-switcher";
 
 export default function Header() {
     const [isVisible, setIsVisible] = useState(true);
