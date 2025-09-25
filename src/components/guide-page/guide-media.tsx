@@ -20,7 +20,7 @@ const GuideMedia = ({ media }: GuideMediaProps) => {
                         className="rounded"
                     />
                     {item.title && (
-                        <figcaption className="text-sm text-gray-500">{item.title}</figcaption>
+                        <figcaption className="text-sm text-gray-500 dark:text-gray-400">{item.title}</figcaption>
                     )}
                 </figure>
             ))}

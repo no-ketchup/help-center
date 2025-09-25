@@ -40,14 +40,14 @@ const GuideBody = ({ body }: GuideBodyProps) => {
 
     if (blocks.length === 0) {
         return (
-            <p className="prose max-w-none text-gray-400 italic">
+            <p className="max-w-none text-gray-400 dark:text-gray-500 italic">
                 No content available.
             </p>
         );
     }
 
     return (
-        <div className="prose max-w-none">
+        <div className="max-w-none">
             {blocks.map((block, idx) => {
                 if (block.type === "heading") {
                     const Tag = `h${block.level}` as keyof React.JSX.IntrinsicElements;
@@ -64,8 +64,8 @@ const GuideBody = ({ body }: GuideBodyProps) => {
                 }
                 if (block.type === "code") {
                     return (
-                        <pre key={idx} className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-                            <code className={`language-${block.language}`}>{block.text}</code>
+                        <pre key={idx} className="bg-gray-100 dark:bg-gray-800 p-4 rounded-md overflow-x-auto">
+                            <code className={`language-${block.language} text-gray-900 dark:text-gray-100`}>{block.text}</code>
                         </pre>
                     );
                 }

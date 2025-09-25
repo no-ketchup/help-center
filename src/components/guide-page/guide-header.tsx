@@ -27,8 +27,8 @@ const GuideHeader = ({
                      }: GuideHeaderProps) => {
     return (
         <header className="space-y-4">
-            <h1 className="text-4xl font-bold">{title || "Untitled Guide"}</h1>
-            <div className="text-sm text-gray-500 space-y-1">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">{title || "Untitled Guide"}</h1>
+            <div className="text-sm text-gray-500 dark:text-gray-400 space-y-1">
                 {createdDate && (
                     <p>
                         <strong>Created:</strong> {formatDate(createdDate)}
@@ -50,7 +50,7 @@ const GuideHeader = ({
                     {categories.map((category) => (
                         <span
                             key={category.slug}
-                            className="px-2 py-1 bg-gray-200 rounded text-sm text-gray-700"
+                            className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-sm text-gray-700 dark:text-gray-300"
                             aria-label={`Category: ${category.name}`}
                         >
               {category.name}
