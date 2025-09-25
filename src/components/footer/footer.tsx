@@ -37,7 +37,7 @@ export default function Footer() {
                         className="text-gray-800 dark:text-gray-200 transition-colors duration-150 ease-out"
                     />
                     <p className="text-sm">
-                        No-code Janitor © {currentYear}
+                        Linn the No-code Janitor © {currentYear}
                         <br />
                         Built with codes.
                     </p>

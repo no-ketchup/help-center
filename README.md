@@ -20,14 +20,14 @@ from scratch in **code** for long-term maintainability.
 - This repo can not run out of the box right now — configs and workflows are still WIP.
 
 ## Roadmap
-Planned architecture:
+Architecture:
 ```
 Frontend (Vercel) → Cloud Run (API) → Neon (DB)
 ↘︎ GCS (media blob storage)
 ```
 
 ### To-Do
-- [ ] Backend dev-editor mappers
+- [x] Backend dev-editor mappers
 - [ ] Frontend: categories, guides, FAQ
 - [ ] GitHub workflows (later, once project stabilizes)
 
