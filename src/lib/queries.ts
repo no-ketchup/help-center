@@ -1,8 +1,10 @@
-import { gql, ApolloClient, InMemoryCache } from "@apollo/client";
+import { gql, ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 
 // Apollo client with SSR disabled
 const client = new ApolloClient({
-    uri: process.env.NEXT_PUBLIC_GRAPHQL_URL,
+    link: new HttpLink({
+        uri: process.env.NEXT_PUBLIC_GRAPHQL_URL,
+    }),
     cache: new InMemoryCache(),
     ssrMode: false,
 });
