@@ -29,6 +29,7 @@ Frontend (Vercel) → Cloud Run (API) → Neon (DB)
 ### To-Do
 - [x] Backend dev-editor mappers
 - [ ] Frontend: categories, guides, FAQ
+- [ ] Search
 - [ ] GitHub workflows (later, once project stabilizes)
 
 ## Status
