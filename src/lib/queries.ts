@@ -1,3 +1,10 @@
+import {
+    GetGuidesResponse,
+    GetGuideResponse,
+    GetCategoriesResponse,
+    GetCategoryResponse,
+    SubmitFeedbackResponse,
+} from "@/types/graphql";
 import { gql, ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 
 // Apollo client with SSR disabled
@@ -9,19 +16,29 @@ const client = new ApolloClient({
     ssrMode: false,
 });
 
-// Small helper to skip queries/mutations during `next build`
-async function safeQuery(query: any, variables?: Record<string, any>) {
+// -------------------------------
+// Safe wrappers
+// -------------------------------
+async function safeQuery<T>(
+    query: any,
+    variables?: Record<string, any>
+): Promise<{ data: T | null }> {
     if (process.env.NEXT_PHASE === "phase-production-build") {
-        return { data: null, errors: [{ message: "Skipped during build" }] };
+        return { data: null };
     }
-    return client.query({ query, variables });
+    const result = await client.query<T>({ query, variables });
+    return { data: result.data ?? null };
 }
 
-async function safeMutate(mutation: any, variables?: Record<string, any>) {
+async function safeMutate<T>(
+    mutation: any,
+    variables?: Record<string, any>
+): Promise<{ data: T | null }> {
     if (process.env.NEXT_PHASE === "phase-production-build") {
-        return { data: null, errors: [{ message: "Skipped during build" }] };
+        return { data: null };
     }
-    return client.mutate({ mutation, variables });
+    const result = await client.mutate<T>({ mutation, variables });
+    return { data: result.data ?? null };
 }
 
 // -------------------------------
@@ -41,7 +58,7 @@ export const GET_GUIDES = gql`
 `;
 
 export async function getGuides() {
-    const { data } = await safeQuery(GET_GUIDES);
+    const { data } = await safeQuery<GetGuidesResponse>(GET_GUIDES);
     return data?.guides ?? [];
 }
 
@@ -73,7 +90,7 @@ export const GET_GUIDE = gql`
 `;
 
 export async function getGuide(slug: string) {
-    const { data } = await safeQuery(GET_GUIDE, { slug });
+    const { data } = await safeQuery<GetGuideResponse>(GET_GUIDE, { slug });
     return data?.guide ?? null;
 }
 
@@ -94,7 +111,7 @@ export const GET_CATEGORIES = gql`
 `;
 
 export async function getCategories() {
-    const { data } = await safeQuery(GET_CATEGORIES);
+    const { data } = await safeQuery<GetCategoriesResponse>(GET_CATEGORIES);
     return data?.categories ?? [];
 }
 
@@ -120,7 +137,7 @@ export const GET_CATEGORY = gql`
 `;
 
 export async function getCategory(slug: string) {
-    const { data } = await safeQuery(GET_CATEGORY, { slug });
+    const { data } = await safeQuery<GetCategoryResponse>(GET_CATEGORY, { slug });
     return data?.category ?? null;
 }
 
@@ -156,6 +173,9 @@ export async function submitFeedback(input: {
     message: string;
     expectReply: boolean;
 }) {
-    const { data } = await safeMutate(SUBMIT_FEEDBACK, input);
+    const { data } = await safeMutate<SubmitFeedbackResponse>(
+        SUBMIT_FEEDBACK,
+        input
+    );
     return data?.submitFeedback ?? null;
 }
