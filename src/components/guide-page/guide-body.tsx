@@ -2,7 +2,9 @@ import React from "react";
 
 type ParagraphBlock = { type: "paragraph"; text: string };
 type HeadingBlock = { type: "heading"; level: number; text: string };
-type Block = ParagraphBlock | HeadingBlock;
+type ListBlock = { type: "list"; items: string[] };
+type CodeBlock = { type: "code"; language: string; text: string };
+type Block = ParagraphBlock | HeadingBlock | ListBlock | CodeBlock;
 
 interface GuideBodyProps {
     body: unknown; // raw JSON from backend
@@ -50,6 +52,22 @@ const GuideBody = ({ body }: GuideBodyProps) => {
                 if (block.type === "heading") {
                     const Tag = `h${block.level}` as keyof React.JSX.IntrinsicElements;
                     return <Tag key={idx}>{block.text}</Tag>;
+                }
+                if (block.type === "list") {
+                    return (
+                        <ul key={idx} className="list-disc list-inside space-y-1">
+                            {block.items.map((item, itemIdx) => (
+                                <li key={itemIdx}>{item}</li>
+                            ))}
+                        </ul>
+                    );
+                }
+                if (block.type === "code") {
+                    return (
+                        <pre key={idx} className="bg-gray-100 p-4 rounded-md overflow-x-auto">
+                            <code className={`language-${block.language}`}>{block.text}</code>
+                        </pre>
+                    );
                 }
                 return <p key={idx}>{block.text}</p>;
             })}
